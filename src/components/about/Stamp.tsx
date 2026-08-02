@@ -53,6 +53,7 @@ function StampFrame({ width, height }: { width: number; height: number }) {
 export function Stamp({
   label,
   icon,
+  imageSrc,
   width,
   height,
   left,
@@ -61,7 +62,10 @@ export function Stamp({
   boardRef,
 }: {
   label: string;
-  icon: ReactNode;
+  icon?: ReactNode;
+  /** Pre-designed stamp artwork (perforation, caption, everything already
+   * baked in) — rendered as-is instead of the icon + SVG frame layout. */
+  imageSrc?: string;
   width: number;
   height: number;
   left: string;
@@ -140,15 +144,30 @@ export function Stamp({
       }}
       onPointerDown={onPointerDown}
     >
-      <StampFrame width={width} height={height} />
-      <div className="relative flex h-full flex-col items-center justify-between px-2 pb-4 pt-3">
-        <p className="text-center font-grotesk text-[9px] font-semibold uppercase leading-tight tracking-[0.09em] text-foreground">
-          {label}
-        </p>
-        <div className="flex w-full flex-1 items-center justify-center py-1 text-foreground/85">
-          {icon}
+      {imageSrc ? (
+        <div className="absolute inset-0" style={{ filter: "drop-shadow(0 8px 14px rgba(30,28,25,0.2))" }}>
+          <img
+            src={imageSrc}
+            alt={label}
+            draggable={false}
+            onDragStart={(e) => e.preventDefault()}
+            className="h-full w-full"
+            style={{ objectFit: "cover", pointerEvents: "none" }}
+          />
         </div>
-      </div>
+      ) : (
+        <>
+          <StampFrame width={width} height={height} />
+          <div className="relative flex h-full flex-col items-center justify-between px-2 pb-4 pt-3">
+            <p className="text-center font-grotesk text-[9px] font-semibold uppercase leading-tight tracking-[0.09em] text-foreground">
+              {label}
+            </p>
+            <div className="flex w-full flex-1 items-center justify-center py-1 text-foreground/85">
+              {icon}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
