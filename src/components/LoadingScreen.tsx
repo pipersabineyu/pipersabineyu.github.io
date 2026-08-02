@@ -42,8 +42,17 @@ function faceTransforms(half: number) {
   ];
 }
 
-// front, back, right, left, top, bottom — shaded like a die catching soft light.
-const FACE_SHADES = ["#f6f5f1", "#e2e1db", "#eeeee8", "#eeeee8", "#f9f8f4", "#e7e6e0"];
+// front, back, right, left, top, bottom — a light source from directly above,
+// so each face sits at its own clear tonal step (studio-render style), and
+// the step itself — not a stroke — is what reads as the edge between faces.
+const FACE_GRADIENTS = [
+  "linear-gradient(180deg, #f7f6f2 0%, #eae9e3 100%)",
+  "linear-gradient(180deg, #c2c1bb 0%, #b4b3ad 100%)",
+  "linear-gradient(180deg, #d5d4ce 0%, #c7c6c0 100%)",
+  "linear-gradient(180deg, #dedcd6 0%, #d0cfc9 100%)",
+  "linear-gradient(180deg, #fdfcfa 0%, #f6f5f1 100%)",
+  "linear-gradient(180deg, #bdbcb6 0%, #b0afa9 100%)",
+];
 
 // A 1×1 stand-in for the homepage photo cube — same six-face geometry, plain
 // shaded faces instead of photo tiles. It scales and rotates in place to
@@ -51,32 +60,36 @@ const FACE_SHADES = ["#f6f5f1", "#e2e1db", "#eeeee8", "#eeeee8", "#f9f8f4", "#e7
 // at 100% reads as one continuous object rather than a swap.
 function MiniCube({ size, rx, ry }: { size: number; rx: number; ry: number }) {
   const half = size / 2;
-  const radius = Math.max(3, size * 0.045);
+  const radius = size * 0.06;
   return (
-    <div
-      style={{
-        position: "relative",
-        width: size,
-        height: size,
-        transformStyle: "preserve-3d",
-        transform: `rotateX(${rx}deg) rotateY(${ry}deg)`,
-      }}
-    >
-      {faceTransforms(half).map((t, i) => (
-        <div
-          key={i}
-          style={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: radius,
-            background: FACE_SHADES[i],
-            border: "1px solid var(--color-border)",
-            boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
-            backfaceVisibility: "hidden",
-            transform: t,
-          }}
-        />
-      ))}
+    // The drop-shadow lives on this outer wrapper, not the preserve-3d cube
+    // itself — a `filter` on a preserve-3d element flattens its children to
+    // a single 2D layer in most browsers, hiding every face but one.
+    <div style={{ filter: "drop-shadow(0 18px 24px rgba(30,28,25,0.14))" }}>
+      <div
+        style={{
+          position: "relative",
+          width: size,
+          height: size,
+          transformStyle: "preserve-3d",
+          transform: `rotateX(${rx}deg) rotateY(${ry}deg)`,
+        }}
+      >
+        {faceTransforms(half).map((t, i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: radius,
+              background: FACE_GRADIENTS[i],
+              boxShadow: "inset 0 0 0.45em rgba(30,28,25,0.12)",
+              backfaceVisibility: "hidden",
+              transform: t,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
