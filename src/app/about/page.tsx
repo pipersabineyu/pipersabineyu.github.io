@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { FadeIn } from "@/components/FadeIn";
-import { WaveBox } from "@/components/about/WaveBox";
+import { StampBoard } from "@/components/about/StampBoard";
 import { profile } from "@/lib/profile";
 import { projects } from "@/lib/projects";
 
@@ -18,7 +18,10 @@ export default function AboutPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-6 pb-24 pt-24 sm:pt-28">
       <FadeIn>
-        <h1 className="max-w-2xl font-playfair text-[clamp(1.8rem,4.5vw,2.5rem)] italic leading-tight text-foreground">
+        <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
+          About me
+        </p>
+        <h1 className="mt-3 max-w-2xl font-playfair text-[clamp(1.8rem,4.5vw,2.5rem)] italic leading-tight text-foreground">
           {profile.aboutBio}
         </h1>
       </FadeIn>
@@ -29,7 +32,7 @@ export default function AboutPage() {
             Beyond the work
           </h2>
           <div className="mt-4">
-            <WaveBox />
+            <StampBoard />
           </div>
         </div>
       </FadeIn>
