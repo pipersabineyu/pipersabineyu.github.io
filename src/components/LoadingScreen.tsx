@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const SESSION_KEY = "piper-loaded";
 const COUNT_DURATION = 2100;
@@ -54,13 +54,17 @@ const FACE_GRADIENTS = [
   "linear-gradient(180deg, #bdbcb6 0%, #b0afa9 100%)",
 ];
 
+// Fixed (not scaled with size) so the corner curve reads the same whether
+// the cube is mini or grown — scaling it with size made the curve look
+// inconsistent between the two states.
+const FACE_RADIUS = 6;
+
 // A 1×1 stand-in for the homepage photo cube — same six-face geometry, plain
 // shaded faces instead of photo tiles. It scales and rotates in place to
 // match the real cube's starting size and angle exactly, so growing into it
 // at 100% reads as one continuous object rather than a swap.
 function MiniCube({ size, rx, ry }: { size: number; rx: number; ry: number }) {
   const half = size / 2;
-  const radius = size * 0.06;
   return (
     // The drop-shadow lives on this outer wrapper, not the preserve-3d cube
     // itself — a `filter` on a preserve-3d element flattens its children to
@@ -81,7 +85,7 @@ function MiniCube({ size, rx, ry }: { size: number; rx: number; ry: number }) {
             style={{
               position: "absolute",
               inset: 0,
-              borderRadius: radius,
+              borderRadius: FACE_RADIUS,
               background: FACE_GRADIENTS[i],
               boxShadow: "inset 0 0 0.45em rgba(30,28,25,0.12)",
               backfaceVisibility: "hidden",
@@ -93,26 +97,6 @@ function MiniCube({ size, rx, ry }: { size: number; rx: number; ry: number }) {
     </div>
   );
 }
-
-const bounceVariants: Variants = {
-  bounce: {
-    y: [0, -6, -46, -6, 0],
-    scaleX: [1.16, 1, 0.9, 1, 1.16],
-    scaleY: [0.84, 1, 1.1, 1, 0.84],
-    transition: {
-      duration: 0.9,
-      times: [0, 0.15, 0.45, 0.85, 1],
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  },
-  settle: {
-    y: 0,
-    scaleX: 1,
-    scaleY: 1,
-    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-  },
-};
 
 export function LoadingScreen() {
   const [show, setShow] = useState(false);
@@ -204,13 +188,9 @@ export function LoadingScreen() {
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="absolute inset-0 flex items-center justify-center pb-28 sm:pb-0">
-            <motion.div
-              variants={bounceVariants}
-              animate={phase === "counting" ? "bounce" : "settle"}
-              style={{ perspective: 900 }}
-            >
+            <div style={{ perspective: 900 }}>
               <MiniCube size={cubeSize} rx={rot.rx} ry={rot.ry} />
-            </motion.div>
+            </div>
           </div>
 
           <div
