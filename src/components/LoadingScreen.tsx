@@ -5,31 +5,87 @@ import { AnimatePresence, motion, type Variants } from "framer-motion";
 
 const SESSION_KEY = "piper-loaded";
 const COUNT_DURATION = 2100;
-const JUMP_DURATION = 0.55;
+const GROW_DURATION = 750;
+const HOLD_DURATION = 150;
+const MINI_SIZE = 56;
+
+// Matches PhotoCube's own initial base rotation (rx: -16, ry: -30), so
+// growing into it lines up instead of snapping to a new angle.
+const TARGET_RX = -16;
+const TARGET_RY = -30;
 
 function easeOutQuint(t: number) {
   return 1 - Math.pow(1 - t, 5);
 }
 
-const CUBE_SIZE = 34;
-const HALF = CUBE_SIZE / 2;
+// Same formula as CenterStage's useCubeSize, so the mini cube grows into
+// exactly the size the real cube will be at.
+function useCubeTargetSize() {
+  const [size, setSize] = useState(420);
+  useEffect(() => {
+    const update = () => setSize(Math.min(420, window.innerWidth * 0.68));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return size;
+}
+
+function faceTransforms(half: number) {
+  return [
+    `translateZ(${half}px)`,
+    `rotateY(180deg) translateZ(${half}px)`,
+    `rotateY(90deg) translateZ(${half}px)`,
+    `rotateY(-90deg) translateZ(${half}px)`,
+    `rotateX(90deg) translateZ(${half}px)`,
+    `rotateX(-90deg) translateZ(${half}px)`,
+  ];
+}
 
 // front, back, right, left, top, bottom — shaded like a die catching soft light.
-const FACES = [
-  { transform: `translateZ(${HALF}px)`, background: "#f6f5f1" },
-  { transform: `rotateY(180deg) translateZ(${HALF}px)`, background: "#e2e1db" },
-  { transform: `rotateY(90deg) translateZ(${HALF}px)`, background: "#eeeee8" },
-  { transform: `rotateY(-90deg) translateZ(${HALF}px)`, background: "#eeeee8" },
-  { transform: `rotateX(90deg) translateZ(${HALF}px)`, background: "#f9f8f4" },
-  { transform: `rotateX(-90deg) translateZ(${HALF}px)`, background: "#e7e6e0" },
-];
+const FACE_SHADES = ["#f6f5f1", "#e2e1db", "#eeeee8", "#eeeee8", "#f9f8f4", "#e7e6e0"];
 
-const cubeVariants: Variants = {
+// A 1×1 stand-in for the homepage photo cube — same six-face geometry, plain
+// shaded faces instead of photo tiles. It scales and rotates in place to
+// match the real cube's starting size and angle exactly, so growing into it
+// at 100% reads as one continuous object rather than a swap.
+function MiniCube({ size, rx, ry }: { size: number; rx: number; ry: number }) {
+  const half = size / 2;
+  const radius = Math.max(3, size * 0.045);
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: size,
+        height: size,
+        transformStyle: "preserve-3d",
+        transform: `rotateX(${rx}deg) rotateY(${ry}deg)`,
+      }}
+    >
+      {faceTransforms(half).map((t, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: radius,
+            background: FACE_SHADES[i],
+            border: "1px solid var(--color-border)",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+            backfaceVisibility: "hidden",
+            transform: t,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+const bounceVariants: Variants = {
   bounce: {
     y: [0, -6, -46, -6, 0],
     scaleX: [1.16, 1, 0.9, 1, 1.16],
     scaleY: [0.84, 1, 1.1, 1, 0.84],
-    opacity: 1,
     transition: {
       duration: 0.9,
       times: [0, 0.15, 0.45, 0.85, 1],
@@ -37,93 +93,26 @@ const cubeVariants: Variants = {
       ease: "easeInOut",
     },
   },
-  jump: {
-    y: [0, -70, -70],
-    scale: [1, 1, 2.4],
-    opacity: [1, 1, 0],
-    transition: {
-      duration: JUMP_DURATION,
-      times: [0, 0.35, 1],
-      ease: [0.16, 1, 0.3, 1],
-    },
+  settle: {
+    y: 0,
+    scaleX: 1,
+    scaleY: 1,
+    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
-// A small stand-in cube that bounces like it's warming up, then leaps and
-// grows away — a wink at the real photo cube it's handing off to.
-function MiniCube({ phase }: { phase: "counting" | "jump" }) {
-  const spinRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let raf = 0;
-    let ry = 24;
-    const rx = -18;
-    const tick = () => {
-      raf = requestAnimationFrame(tick);
-      ry += 0.7;
-      const el = spinRef.current;
-      if (el) el.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  return (
-    <motion.div
-      variants={cubeVariants}
-      animate={phase === "jump" ? "jump" : "bounce"}
-      style={{ perspective: 400 }}
-    >
-      <div
-        ref={spinRef}
-        style={{
-          position: "relative",
-          width: CUBE_SIZE,
-          height: CUBE_SIZE,
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {FACES.map((face, i) => (
-          <div
-            key={i}
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: 4,
-              background: face.background,
-              border: "1px solid var(--color-border)",
-              backfaceVisibility: "hidden",
-              transform: face.transform,
-            }}
-          />
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-function RefreshIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 12a9 9 0 1 1-3-6.7" />
-      <polyline points="21 3 21 9 15 9" />
-    </svg>
-  );
-}
-
 export function LoadingScreen() {
   const [show, setShow] = useState(false);
-  const [phase, setPhase] = useState<"counting" | "jump">("counting");
+  const [phase, setPhase] = useState<"counting" | "grow">("counting");
   const [count, setCount] = useState(0);
+  const [cubeSize, setCubeSize] = useState(MINI_SIZE);
+  const [rot, setRot] = useState({ rx: -18, ry: 0 });
+
+  const targetSize = useCubeTargetSize();
+  const targetSizeRef = useRef(targetSize);
+  targetSizeRef.current = targetSize;
+
+  const spin = useRef({ rx: -18, ry: 0 });
   const rafRef = useRef<number | undefined>(undefined);
 
   const play = useCallback(() => {
@@ -131,24 +120,51 @@ export function LoadingScreen() {
     setShow(true);
     setPhase("counting");
     setCount(0);
+    setCubeSize(MINI_SIZE);
+    spin.current = { rx: -18, ry: 0 };
+    setRot({ ...spin.current });
     document.body.style.overflow = "hidden";
-    const start = performance.now();
 
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / COUNT_DURATION);
-      setCount(Math.round(easeOutQuint(t) * 100));
+    const countStart = performance.now();
+
+    const growTick = (growStart: number, from: { rx: number; ry: number }) => {
+      const now = performance.now();
+      const t = Math.min(1, (now - growStart) / GROW_DURATION);
+      const e = easeOutQuint(t);
+      setRot({
+        rx: from.rx + (TARGET_RX - from.rx) * e,
+        ry: from.ry + (TARGET_RY - from.ry) * e,
+      });
+      setCubeSize(MINI_SIZE + (targetSizeRef.current - MINI_SIZE) * e);
+
       if (t < 1) {
-        rafRef.current = requestAnimationFrame(tick);
+        rafRef.current = requestAnimationFrame(() => growTick(growStart, from));
       } else {
-        setPhase("jump");
         setTimeout(() => {
           sessionStorage.setItem(SESSION_KEY, "1");
           setShow(false);
-        }, JUMP_DURATION * 1000);
+        }, HOLD_DURATION);
       }
     };
 
-    rafRef.current = requestAnimationFrame(tick);
+    const countTick = (now: number) => {
+      spin.current.ry += 2.1;
+      setRot({ ...spin.current });
+
+      const t = Math.min(1, (now - countStart) / COUNT_DURATION);
+      setCount(Math.round(easeOutQuint(t) * 100));
+
+      if (t < 1) {
+        rafRef.current = requestAnimationFrame(countTick);
+      } else {
+        setPhase("grow");
+        const from = { ...spin.current };
+        const growStart = performance.now();
+        rafRef.current = requestAnimationFrame(() => growTick(growStart, from));
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(countTick);
   }, []);
 
   useLayoutEffect(() => {
@@ -160,34 +176,41 @@ export function LoadingScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      <AnimatePresence onExitComplete={() => (document.body.style.overflow = "")}>
-        {show && (
-          <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="flex flex-col items-center gap-8">
-              <MiniCube phase={phase} />
-              <span className="font-playfair text-[11vw] leading-none tabular-nums text-foreground sm:text-[6vw]">
-                {count}
-                <span className="text-muted">%</span>
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+  useEffect(() => {
+    const handler = () => play();
+    window.addEventListener("piper:replay-intro", handler);
+    return () => window.removeEventListener("piper:replay-intro", handler);
+  }, [play]);
 
-      <button
-        type="button"
-        onClick={play}
-        aria-label="Replay intro animation"
-        className="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/40 text-subtle backdrop-blur-md transition-colors hover:text-foreground"
-      >
-        <RefreshIcon />
-      </button>
-    </>
+  return (
+    <AnimatePresence onExitComplete={() => (document.body.style.overflow = "")}>
+      {show && (
+        <motion.div
+          className="fixed inset-0 z-[100] bg-background"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center pb-28 sm:pb-0">
+            <motion.div
+              variants={bounceVariants}
+              animate={phase === "counting" ? "bounce" : "settle"}
+              style={{ perspective: 900 }}
+            >
+              <MiniCube size={cubeSize} rx={rot.rx} ry={rot.ry} />
+            </motion.div>
+          </div>
+
+          <div
+            className="pointer-events-none absolute inset-x-0 top-[62%] text-center transition-opacity duration-200"
+            style={{ opacity: phase === "counting" ? 1 : 0 }}
+          >
+            <span className="font-playfair text-[11vw] leading-none tabular-nums text-foreground sm:text-[6vw]">
+              {count}
+              <span className="text-muted">%</span>
+            </span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

@@ -31,6 +31,31 @@ const blockPosition =
   "absolute inset-x-0 bottom-8 px-6 text-center " +
   "sm:inset-x-auto sm:bottom-auto sm:left-8 sm:top-1/2 sm:-translate-y-1/2 sm:px-0 sm:text-left";
 
+function ReplayButton() {
+  return (
+    <button
+      type="button"
+      onClick={() => window.dispatchEvent(new Event("piper:replay-intro"))}
+      className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/40 px-3.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-subtle backdrop-blur-md transition-colors hover:text-foreground"
+    >
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M21 12a9 9 0 1 1-3-6.7" />
+        <polyline points="21 3 21 9 15 9" />
+      </svg>
+      Replay intro
+    </button>
+  );
+}
+
 export function FixedUI({
   progress,
   exitProgress,
@@ -74,8 +99,11 @@ export function FixedUI({
           Who I am <span className="text-subtle/70">· 00/{String(projects.length).padStart(2, "0")}</span>
         </p>
         <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground sm:mx-0">
-          Product designer who ships production code.
+          Designer who tinkers, creates, and ships production-ready code.
         </p>
+        <div className="flex justify-center sm:justify-start">
+          <ReplayButton />
+        </div>
       </div>
 
       <div
