@@ -1,0 +1,104 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { useMotionValueEvent, type MotionValue } from "framer-motion";
+import { projects } from "@/lib/projects";
+import { SEG, MARGIN, segmentOpacity } from "./segmentOpacity";
+
+// Same fade-in/plateau/fade-out shape (and the same MARGIN) as the project
+// crossfades in CenterStage, so this handoff feels identical to those.
+function introOpacityAt(p: number) {
+  const end = SEG;
+  const points = [0, Math.min(MARGIN, end), Math.max(end - MARGIN, 0), end];
+  return segmentOpacity(p, points, [1, 1, 1, 0]);
+}
+
+function workOpacityAt(p: number) {
+  const start = SEG;
+  const end = 1;
+  const points = [start, start + MARGIN, end - MARGIN, end];
+  return segmentOpacity(p, points, [0, 1, 1, 1]);
+}
+
+// How far past the pinned section (0→1) before the work text is fully gone.
+// Quick — it shouldn't linger once you've moved on to the plain work list.
+function exitFadeAt(p: number) {
+  return 1 - Math.min(1, p / 0.3);
+}
+
+const blockPosition =
+  "absolute inset-x-0 bottom-8 px-6 text-center " +
+  "sm:inset-x-auto sm:bottom-auto sm:left-8 sm:top-1/2 sm:-translate-y-1/2 sm:px-0 sm:text-left";
+
+export function FixedUI({
+  progress,
+  exitProgress,
+}: {
+  progress: MotionValue<number>;
+  exitProgress: MotionValue<number>;
+}) {
+  const [index, setIndex] = useState(0);
+  const [introOpacity, setIntroOpacity] = useState(() =>
+    introOpacityAt(progress.get())
+  );
+  const [workOpacity, setWorkOpacity] = useState(
+    () => workOpacityAt(progress.get()) * exitFadeAt(exitProgress.get())
+  );
+
+  useMotionValueEvent(progress, "change", (latest) => {
+    setIntroOpacity(introOpacityAt(latest));
+    setWorkOpacity(workOpacityAt(latest) * exitFadeAt(exitProgress.get()));
+
+    const seg = Math.floor(latest / SEG) - 1;
+    const rounded = Math.max(0, Math.min(projects.length - 1, seg));
+    setIndex((prev) => (prev === rounded ? prev : rounded));
+  });
+
+  useMotionValueEvent(exitProgress, "change", (latest) => {
+    setWorkOpacity(workOpacityAt(progress.get()) * exitFadeAt(latest));
+  });
+
+  const current = projects[index];
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-40 font-grotesk text-foreground">
+      <div
+        className={blockPosition}
+        style={{
+          opacity: introOpacity,
+          pointerEvents: introOpacity > 0.02 ? "auto" : "none",
+        }}
+      >
+        <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">
+          Who I am <span className="text-subtle/70">· 00/{String(projects.length).padStart(2, "0")}</span>
+        </p>
+        <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground sm:mx-0">
+          Product designer who ships production code.
+        </p>
+      </div>
+
+      <div
+        className={blockPosition}
+        style={{
+          opacity: workOpacity,
+          pointerEvents: workOpacity > 0.02 ? "auto" : "none",
+        }}
+      >
+        <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">
+          Selected work{" "}
+          <span className="text-subtle/70">
+            · {String(index + 1).padStart(2, "0")}/
+            {String(projects.length).padStart(2, "0")}
+          </span>
+        </p>
+        <Link
+          href={`/work/${current.slug}`}
+          className="mx-auto mt-3 block max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground sm:mx-0"
+        >
+          {current.title}
+        </Link>
+      </div>
+    </div>
+  );
+}
