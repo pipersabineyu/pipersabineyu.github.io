@@ -19,25 +19,25 @@ import {
 const ROWS = [2, 27, 52, 77];
 
 const STAMPS = [
-  { label: "Tennis", icon: <TennisIcon />, left: "6%", top: `${ROWS[0]}%`, rotate: -6 },
-  { label: "Running", icon: <RunningIcon />, left: "54%", top: `${ROWS[0]}%`, rotate: 5 },
-  { label: "Pressing flowers", icon: <PressedFlowerIcon />, left: "4%", top: `${ROWS[1]}%`, rotate: 4 },
-  { label: "Making bouquets", icon: <BouquetIcon />, left: "52%", top: `${ROWS[1]}%`, rotate: -5 },
-  { label: "Classical music", icon: <MusicNotesIcon />, left: "7%", top: `${ROWS[2]}%`, rotate: -4 },
-  { label: "Surfboard wipeout", icon: <WipeoutIcon />, left: "55%", top: `${ROWS[2]}%`, rotate: 6 },
-  { label: "Can't bake", icon: <BurntCupcakeIcon />, left: "5%", top: `${ROWS[3]}%`, rotate: -3 },
-  { label: "Opera singer", icon: <OperaSingerIcon />, left: "53%", top: `${ROWS[3]}%`, rotate: 4 },
+  { label: "Tennis", icon: <TennisIcon />, left: "8%", top: `${ROWS[0]}%`, rotate: -6 },
+  { label: "Running", icon: <RunningIcon />, left: "58%", top: `${ROWS[0]}%`, rotate: 5 },
+  { label: "Pressing flowers", icon: <PressedFlowerIcon />, left: "6%", top: `${ROWS[1]}%`, rotate: 4 },
+  { label: "Making bouquets", icon: <BouquetIcon />, left: "56%", top: `${ROWS[1]}%`, rotate: -5 },
+  { label: "Classical music", icon: <MusicNotesIcon />, left: "9%", top: `${ROWS[2]}%`, rotate: -4 },
+  { label: "Surfboard wipeout", icon: <WipeoutIcon />, left: "59%", top: `${ROWS[2]}%`, rotate: 6 },
+  { label: "Can't bake", icon: <BurntCupcakeIcon />, left: "7%", top: `${ROWS[3]}%`, rotate: -3 },
+  { label: "Opera singer", icon: <OperaSingerIcon />, left: "57%", top: `${ROWS[3]}%`, rotate: 4 },
 ];
 
 // Two size presets rather than a fluid scale — the SVG perforation math
 // needs real px, and a coarse mobile/desktop split keeps stamps legible at
 // both without a resize-observer per stamp.
 function useStampSize() {
-  const [size, setSize] = useState({ width: 136, height: 178 });
+  const [size, setSize] = useState({ width: 152, height: 198 });
   useEffect(() => {
     const update = () =>
       setSize(
-        window.innerWidth < 640 ? { width: 108, height: 142 } : { width: 136, height: 178 }
+        window.innerWidth < 640 ? { width: 108, height: 142 } : { width: 152, height: 198 }
       );
     update();
     window.addEventListener("resize", update);
@@ -53,7 +53,7 @@ export function StampBoard() {
   return (
     <div
       ref={boardRef}
-      className="relative mx-auto h-[660px] w-full max-w-xl rounded-3xl border border-border bg-[#efebe2] sm:h-[800px]"
+      className="relative h-[660px] w-full rounded-3xl border border-border bg-[#ececea] sm:h-[820px]"
     >
       <p className="pointer-events-none absolute left-5 top-4 z-10 font-grotesk text-[10px] uppercase tracking-[0.2em] text-subtle">
         Drag to rearrange

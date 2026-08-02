@@ -21,7 +21,7 @@ export default function AboutPage() {
         <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
           About me
         </p>
-        <h1 className="mt-3 max-w-2xl font-playfair text-[clamp(1.8rem,4.5vw,2.5rem)] italic leading-tight text-foreground">
+        <h1 className="mt-3 max-w-2xl text-[clamp(1.8rem,4.5vw,2.5rem)] font-semibold leading-tight text-foreground">
           {profile.aboutBio}
         </h1>
       </FadeIn>
@@ -29,7 +29,7 @@ export default function AboutPage() {
       <FadeIn delay={0.1}>
         <div className="mt-14">
           <h2 className="font-grotesk text-[13px] text-foreground">
-            Beyond the work
+            Hobbies and minor disasters
           </h2>
           <div className="mt-4">
             <StampBoard />
