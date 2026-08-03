@@ -101,29 +101,38 @@ export function LoadingScreen() {
     <AnimatePresence onExitComplete={() => (document.body.style.overflow = "")}>
       {show && (
         <motion.div
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-5 bg-background"
+          className="fixed inset-0 z-[100] bg-background"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
-          <PhotoCube
-            src={CUBE_IMAGE_SRC}
-            size={cubeSize}
-            draggable={false}
-            spinSpeed={0.35}
-            // Free-spins while counting; locking to progress=0 once growing
-            // eases it to the exact angle the real homepage cube starts at
-            // (PhotoCube smooths this one-time transition itself), so the
-            // handoff doesn't jump.
-            progress={phase === "grow" ? 0 : undefined}
-          />
+          {/* Identical centering to CenterStage's DesignLayer (including the
+              mobile pb-28 shift) so the cube sits at the exact position, size,
+              and — via the progress handoff in PhotoCube — orientation the
+              real homepage cube starts at, at every breakpoint. */}
+          <div className="absolute inset-0 flex items-center justify-center pb-28 sm:pb-0">
+            <PhotoCube
+              src={CUBE_IMAGE_SRC}
+              size={cubeSize}
+              draggable={false}
+              spinSpeed={0.35}
+              progress={phase === "grow" ? 0 : undefined}
+            />
+          </div>
 
-          <span
-            className="font-playfair text-[7vw] leading-none tabular-nums text-foreground transition-opacity duration-200 sm:text-[3.2vw]"
-            style={{ opacity: phase === "counting" ? 1 : 0 }}
-          >
-            {count}
-            <span className="text-muted">%</span>
-          </span>
+          {/* Same centering reference as the cube layer, so the gap between
+              them stays consistent instead of drifting with the pb-28 shift. */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center pb-28 sm:pb-0">
+            <span
+              className="font-playfair text-[7vw] leading-none tabular-nums text-foreground transition-opacity duration-200 sm:text-[3.2vw]"
+              style={{
+                opacity: phase === "counting" ? 1 : 0,
+                transform: `translateY(${MINI_SIZE / 2 + 28}px)`,
+              }}
+            >
+              {count}
+              <span className="text-muted">%</span>
+            </span>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
