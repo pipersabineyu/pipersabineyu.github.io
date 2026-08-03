@@ -44,6 +44,10 @@ export interface PhotoCubeProps {
   tileRadius?: number;
   /** Idle rotation, deg/frame. Default 0.22. Ignored when `progress` is set. */
   spinSpeed?: number;
+  /** Duration (ms) of the one-time ease when `progress` first replaces free
+   * spin. Match this to any concurrent size animation so rotation and scale
+   * finish in lockstep instead of drifting apart. Default 450. */
+  settleDuration?: number;
   /** Allow pointer drag to rotate. Default true. Works alongside `progress`. */
   draggable?: boolean;
   /** Film grain amount, 0–70. Default 26. */
@@ -205,6 +209,7 @@ export default function PhotoCube({
   gap = 10,
   tileRadius = 3,
   spinSpeed = 0.22,
+  settleDuration = 450,
   draggable = true,
   grain = 14,
   contrast = 1.18,
@@ -257,10 +262,13 @@ export default function PhotoCube({
       offset.current.vx = 0;
       offset.current.vy = 0;
       const start = performance.now();
-      const DURATION = 450;
       const step = (now: number) => {
-        const t = Math.min(1, (now - start) / DURATION);
-        const e = 1 - Math.pow(1 - t, 3);
+        const t = Math.min(1, (now - start) / settleDuration);
+        // Quintic-out — matches the easing typically used for a concurrent
+        // size animation (e.g. the loading screen's grow), so a consumer
+        // that sets settleDuration to the same value gets visually locked,
+        // synchronized motion instead of two independently-shaped curves.
+        const e = 1 - Math.pow(1 - t, 5);
         base.current.rx = fromRx + (targetRx - fromRx) * e;
         base.current.ry = fromRy + (targetRy - fromRy) * e;
         if (t < 1) settleRaf.current = requestAnimationFrame(step);
@@ -273,7 +281,7 @@ export default function PhotoCube({
     wasScrollDriven.current = true;
 
     return () => cancelAnimationFrame(settleRaf.current);
-  }, [progress, turns, hasScroll]);
+  }, [progress, turns, hasScroll, settleDuration]);
 
   // Unified loop: applies drag momentum decay (and idle autospin when not
   // scroll-driven), then composes base + offset into the final transform.
