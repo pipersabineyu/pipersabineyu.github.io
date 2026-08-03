@@ -227,11 +227,52 @@ export default function PhotoCube({
   const last = useRef({ x: 0, y: 0 });
   const half = size / 2;
 
+  // Tracks whether the *previous* render was scroll-driven, so we can tell
+  // "just started following progress" (free-spin -> controlled) apart from
+  // "still following progress" (an ordinary scroll update).
+  const wasScrollDriven = useRef(false);
+  const settleRaf = useRef(0);
+
   useEffect(() => {
-    if (!hasScroll) return;
+    if (!hasScroll) {
+      wasScrollDriven.current = false;
+      return;
+    }
     const p = progress as number;
-    base.current.ry = -30 + p * 360 * turns;
-    base.current.rx = -16 + Math.sin(p * Math.PI * 2) * 10;
+    const targetRy = -30 + p * 360 * turns;
+    const targetRx = -16 + Math.sin(p * Math.PI * 2) * 10;
+
+    if (!wasScrollDriven.current) {
+      // First time this cube picks up a progress value — ease into the
+      // target angle instead of snapping, so a free-spinning cube (e.g. the
+      // loading screen's) settles smoothly rather than jumping. Fold the
+      // idle-spin offset into the starting angle and zero it out — it never
+      // decays on its own (only drag momentum does), so left alone it would
+      // sit there permanently added on top of the settled base rotation.
+      cancelAnimationFrame(settleRaf.current);
+      const fromRx = base.current.rx + offset.current.rx;
+      const fromRy = base.current.ry + offset.current.ry;
+      offset.current.rx = 0;
+      offset.current.ry = 0;
+      offset.current.vx = 0;
+      offset.current.vy = 0;
+      const start = performance.now();
+      const DURATION = 450;
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / DURATION);
+        const e = 1 - Math.pow(1 - t, 3);
+        base.current.rx = fromRx + (targetRx - fromRx) * e;
+        base.current.ry = fromRy + (targetRy - fromRy) * e;
+        if (t < 1) settleRaf.current = requestAnimationFrame(step);
+      };
+      settleRaf.current = requestAnimationFrame(step);
+    } else {
+      base.current.ry = targetRy;
+      base.current.rx = targetRx;
+    }
+    wasScrollDriven.current = true;
+
+    return () => cancelAnimationFrame(settleRaf.current);
   }, [progress, turns, hasScroll]);
 
   // Unified loop: applies drag momentum decay (and idle autospin when not

@@ -110,6 +110,11 @@ export function LoadingScreen() {
             size={cubeSize}
             draggable={false}
             spinSpeed={0.35}
+            // Free-spins while counting; locking to progress=0 once growing
+            // eases it to the exact angle the real homepage cube starts at
+            // (PhotoCube smooths this one-time transition itself), so the
+            // handoff doesn't jump.
+            progress={phase === "grow" ? 0 : undefined}
           />
 
           <span
