@@ -10,9 +10,14 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/pscy/",
   instagram: "https://instagram.com/piperzart",
   education: [
-    "Third-year student at UC Berkeley, studying Design, Data, and Economics",
-    "Silicon Valley School of Design",
-    "Design apprenticeship under a Google designer",
+    {
+      org: "UC Berkeley",
+      detail: "HCI Design, Data Science, Economics",
+    },
+    {
+      org: "Silicon Valley School of Design",
+      detail: "Design Accelerator, selected from 500+ applications",
+    },
   ],
   experience: [
     {

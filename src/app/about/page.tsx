@@ -2,16 +2,15 @@ import type { Metadata } from "next";
 import { FadeIn } from "@/components/FadeIn";
 import { StampBoard } from "@/components/about/StampBoard";
 import { profile } from "@/lib/profile";
-import { projects } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: `About — ${profile.name}`,
 };
 
 const STATS = [
-  { value: String(projects.length).padStart(2, "0"), label: "Projects shipped" },
-  { value: "09", label: "Years singing opera" },
-  { value: "03", label: "Year at UC Berkeley" },
+  { value: "08", label: "Projects shipped" },
+  { value: "05", label: "Design awards" },
+  { value: "09", label: "Contract design projects" },
 ];
 
 export default function AboutPage() {
@@ -85,13 +84,17 @@ export default function AboutPage() {
           <h2 className="font-grotesk text-[13px] text-foreground">
             Education
           </h2>
-          <ul className="mt-3 flex flex-col gap-1">
-            {profile.education.map((line) => (
-              <li key={line} className="text-[14px] text-muted">
-                {line}
-              </li>
+          <div className="mt-2 border-t border-border" />
+          <div className="mt-5 flex flex-col gap-5">
+            {profile.education.map((edu) => (
+              <div key={edu.org}>
+                <p className="font-grotesk text-[20px] font-bold leading-tight text-foreground">
+                  {edu.org}
+                </p>
+                <p className="mt-1 text-[13px] text-muted">{edu.detail}</p>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </FadeIn>
 
