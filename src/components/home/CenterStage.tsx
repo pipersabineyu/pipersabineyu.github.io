@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   useMotionValueEvent,
   type MotionValue,
@@ -9,6 +10,11 @@ import {
 import { projects, type Project } from "@/lib/projects";
 import PhotoCube from "./PhotoCube";
 import { TOTAL, SEG, MARGIN, segmentOpacity } from "./segmentOpacity";
+
+// A diagonal open/view arrow (white halo behind ink so it reads on any
+// photo), used as the cursor over a project cover to hint it's clickable.
+const OPEN_CURSOR =
+  "url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij48ZyBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsbD0ibm9uZSI+PGxpbmUgeDE9IjEwIiB5MT0iMjYiIHgyPSIyNiIgeTI9IjEwIi8+PHBvbHlsaW5lIHBvaW50cz0iMTQgMTAgMjYgMTAgMjYgMjIiLz48L2c+PGcgc3Ryb2tlPSIjMjExZjFjIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIj48bGluZSB4MT0iMTAiIHkxPSIyNiIgeDI9IjI2IiB5Mj0iMTAiLz48cG9seWxpbmUgcG9pbnRzPSIxNCAxMCAyNiAxMCAyNiAyMiIvPjwvZz48L3N2Zz4=\") 10 26, pointer";
 
 function opacityAt(p: number, i: number) {
   const start = i * SEG;
@@ -92,7 +98,11 @@ function ProjectLayer({
       className="absolute inset-0 flex items-center justify-center p-6 pb-32 sm:p-16"
       style={{ opacity, pointerEvents: opacity > 0.02 ? "auto" : "none" }}
     >
-      <div className="relative aspect-[4/3] w-full max-w-2xl overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(20,20,20,0.3)]">
+      <Link
+        href={`/work/${project.slug}`}
+        className="relative block aspect-[4/3] w-full max-w-2xl overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(20,20,20,0.3)]"
+        style={{ cursor: OPEN_CURSOR }}
+      >
         <Image
           src={project.cover}
           alt=""
@@ -100,7 +110,7 @@ function ProjectLayer({
           sizes="(min-width: 640px) 700px, 90vw"
           className="object-cover"
         />
-      </div>
+      </Link>
     </div>
   );
 }

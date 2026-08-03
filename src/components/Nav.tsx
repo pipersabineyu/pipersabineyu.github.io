@@ -34,9 +34,9 @@ export function Nav() {
           <Link
             href="/about"
             className={
-              !isHome && pathname === "/about"
-                ? "text-foreground"
-                : "text-subtle transition-colors hover:text-foreground"
+              pathname === "/about"
+                ? "text-subtle"
+                : "text-foreground transition-colors hover:text-subtle"
             }
           >
             About
