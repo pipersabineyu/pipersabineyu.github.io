@@ -2,12 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Stamp } from "./Stamp";
-import {
-  RunningIcon,
-  PressedFlowerIcon,
-  BouquetIcon,
-  MusicNotesIcon,
-} from "./stampIcons";
 
 // Both columns share the same four row-tops (~25% apart, stamps are ~22%
 // tall) so nothing overlaps vertically — left offset and rotation vary per
@@ -16,10 +10,10 @@ const ROWS = [2, 27, 52, 77];
 
 const STAMPS = [
   { label: "Tennis", imageSrc: "/media/about/stamp-tennis.webp", left: "8%", top: `${ROWS[0]}%`, rotate: -6 },
-  { label: "Running", icon: <RunningIcon />, left: "58%", top: `${ROWS[0]}%`, rotate: 5 },
-  { label: "Pressing flowers", icon: <PressedFlowerIcon />, left: "6%", top: `${ROWS[1]}%`, rotate: 4 },
-  { label: "Making bouquets", icon: <BouquetIcon />, left: "56%", top: `${ROWS[1]}%`, rotate: -5 },
-  { label: "Classical music", icon: <MusicNotesIcon />, left: "9%", top: `${ROWS[2]}%`, rotate: -4 },
+  { label: "Running", imageSrc: "/media/about/stamp-running.webp", left: "58%", top: `${ROWS[0]}%`, rotate: 5 },
+  { label: "Pottery", imageSrc: "/media/about/stamp-pottery.webp", left: "6%", top: `${ROWS[1]}%`, rotate: 4 },
+  { label: "Bouquet", imageSrc: "/media/about/stamp-bouquet.webp", left: "56%", top: `${ROWS[1]}%`, rotate: -5 },
+  { label: "Crochet", imageSrc: "/media/about/stamp-crochet.webp", left: "9%", top: `${ROWS[2]}%`, rotate: -4 },
   { label: "Surfboard wipeout", imageSrc: "/media/about/stamp-wipeout.webp", left: "59%", top: `${ROWS[2]}%`, rotate: 6 },
   { label: "Can't bake", imageSrc: "/media/about/stamp-baking.webp", left: "7%", top: `${ROWS[3]}%`, rotate: -3 },
   { label: "Opera singer", imageSrc: "/media/about/stamp-opera.webp", left: "57%", top: `${ROWS[3]}%`, rotate: 4 },
@@ -59,7 +53,6 @@ export function StampBoard() {
         <Stamp
           key={s.label}
           label={s.label}
-          icon={s.icon}
           imageSrc={s.imageSrc}
           width={width}
           height={height}
