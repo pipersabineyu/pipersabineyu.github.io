@@ -28,7 +28,7 @@ function exitFadeAt(p: number) {
 }
 
 const blockPosition =
-  "absolute inset-x-0 bottom-8 px-6 text-center " +
+  "absolute inset-x-0 bottom-12 px-6 text-center " +
   "sm:inset-x-auto sm:bottom-auto sm:left-8 sm:top-1/2 sm:-translate-y-1/2 sm:px-0 sm:text-left";
 
 function ReplayButton() {
@@ -101,7 +101,7 @@ export function FixedUI({
         <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground sm:mx-0">
           Designer who tinkers, creates, and ships production-ready code.
         </p>
-        <div className="flex justify-center sm:justify-start">
+        <div className="hidden sm:flex sm:justify-start">
           <ReplayButton />
         </div>
       </div>

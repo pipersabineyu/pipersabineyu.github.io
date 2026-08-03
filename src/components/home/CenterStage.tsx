@@ -95,7 +95,7 @@ function ProjectLayer({
   const opacity = useLayerOpacity(progress, index + 1);
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center p-6 pb-32 sm:p-16"
+      className="absolute inset-0 flex items-center justify-center p-6 pb-20 sm:p-16"
       style={{ opacity, pointerEvents: opacity > 0.02 ? "auto" : "none" }}
     >
       <Link

@@ -400,7 +400,20 @@ export default function PhotoCube({
                       alt=""
                       draggable={false}
                       onDragStart={(e) => e.preventDefault()}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+                      // Grayscale is already baked in via the canvas filter at
+                      // dice-time, but Safari/WebKit has a long history of
+                      // unreliable support for combined (multi-function)
+                      // Canvas2D `ctx.filter` strings — this CSS filter is a
+                      // robust fallback so tiles stay black-and-white even if
+                      // that baked-in conversion silently no-ops on mobile.
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                        pointerEvents: 'none',
+                        filter: 'grayscale(1)',
+                      }}
                     />
                   ) : null}
                 </div>
