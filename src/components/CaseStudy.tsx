@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BackButton } from "@/components/BackButton";
 import { FadeIn } from "@/components/FadeIn";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { profile } from "@/lib/profile";
@@ -79,12 +80,7 @@ export function CaseStudy({ project }: { project: Project }) {
 
       <div className="mx-auto w-full max-w-2xl px-6 pb-24 pt-8">
         <FadeIn>
-          <Link
-            href="/#work"
-            className="font-grotesk text-[13px] text-muted transition-colors hover:text-foreground"
-          >
-            ← Work
-          </Link>
+          <BackButton href="/#work" label="Back to work" />
         </FadeIn>
         <FadeIn delay={0.06}>
           <p className="mt-6 font-grotesk text-[13px] text-muted">{project.company}</p>

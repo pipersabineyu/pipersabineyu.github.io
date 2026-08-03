@@ -41,6 +41,20 @@ function useCubeTargetSize() {
   return size;
 }
 
+// On phones the cube read as muddy (photo tiles are illegible at that size
+// after the crop) and crowded the percentage — mobile gets just the number,
+// larger breakpoints keep the cube. Matches Tailwind's `sm` breakpoint.
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 640);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return isMobile;
+}
+
 export function LoadingScreen() {
   const [show, setShow] = useState(false);
   const [phase, setPhase] = useState<"counting" | "grow">("counting");
@@ -50,6 +64,7 @@ export function LoadingScreen() {
   const targetSize = useCubeTargetSize();
   const targetSizeRef = useRef(targetSize);
   targetSizeRef.current = targetSize;
+  const isMobile = useIsMobile();
 
   const rafRef = useRef<number | undefined>(undefined);
 
@@ -127,33 +142,37 @@ export function LoadingScreen() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* Identical centering to CenterStage's DesignLayer (including the
-              mobile pb-28 shift) so the cube sits at the exact position, size,
-              and — via the progress handoff in PhotoCube — orientation the
-              real homepage cube starts at, at every breakpoint. */}
-          <div className="absolute inset-0 flex items-center justify-center pb-28 sm:pb-0">
-            <PhotoCube
-              src={CUBE_IMAGE_SRC}
-              size={cubeSize}
-              gap={cubeGap}
-              tileRadius={cubeTileRadius}
-              draggable={false}
-              spinSpeed={0.35}
-              progress={phase === "grow" ? 0 : undefined}
-              // Same duration+easing as the size grow below, so rotation and
-              // scale finish in lockstep instead of two independent curves
-              // drifting apart mid-transition.
-              settleDuration={GROW_DURATION}
-            />
-          </div>
+          {/* Cube only above the mobile breakpoint — see useIsMobile. Identical
+              centering to CenterStage's DesignLayer so it sits at the exact
+              position, size, and — via the progress handoff in PhotoCube —
+              orientation the real homepage cube starts at. */}
+          {!isMobile && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <PhotoCube
+                src={CUBE_IMAGE_SRC}
+                size={cubeSize}
+                gap={cubeGap}
+                tileRadius={cubeTileRadius}
+                draggable={false}
+                spinSpeed={0.35}
+                progress={phase === "grow" ? 0 : undefined}
+                // Same duration+easing as the size grow below, so rotation
+                // and scale finish in lockstep instead of two independent
+                // curves drifting apart mid-transition.
+                settleDuration={GROW_DURATION}
+              />
+            </div>
+          )}
 
-          {/* Top-anchored (not centered + translated) so the gap below the
-              cube is exact regardless of the text's own line-box height.
-              50% + half the mini cube + a fixed gap; the mobile variant
-              subtracts half of pb-28 (112px / 2 = 56px) to match how far
-              that padding shifts the cube's own center up on small screens. */}
+          {/* Desktop: top-anchored below the cube (exact gap regardless of
+              the text's own line-box height — 50% + half the mini cube +
+              a fixed gap). Mobile: no cube to sit below, so just centered. */}
           <span
-            className="pointer-events-none absolute inset-x-0 top-[calc(50%+32px)] text-center font-playfair text-[7vw] leading-none tabular-nums text-foreground transition-opacity duration-200 sm:top-[calc(50%+88px)] sm:text-[3.2vw]"
+            className={`pointer-events-none absolute inset-x-0 text-center font-playfair leading-none tabular-nums text-foreground transition-opacity duration-200 ${
+              isMobile
+                ? "top-1/2 -translate-y-1/2 text-[12vw]"
+                : "top-[calc(50%+88px)] text-[3.2vw]"
+            }`}
             style={{ opacity: phase === "counting" ? 1 : 0 }}
           >
             {count}

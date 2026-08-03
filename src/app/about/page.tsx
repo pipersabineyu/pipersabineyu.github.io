@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BackButton } from "@/components/BackButton";
 import { FadeIn } from "@/components/FadeIn";
 import { StampBoard } from "@/components/about/StampBoard";
 import { profile } from "@/lib/profile";
@@ -17,7 +18,11 @@ export default function AboutPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-6 pb-24 pt-24 sm:pt-28">
       <FadeIn>
-        <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
+        <BackButton />
+      </FadeIn>
+
+      <FadeIn delay={0.03}>
+        <p className="mt-6 font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
           About me
         </p>
         <h1 className="mt-3 max-w-2xl font-grotesk text-[clamp(1.8rem,4.5vw,2.5rem)] font-semibold leading-tight text-foreground">

@@ -1,7 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <g stroke="#c9b558" stroke-width="0.4" stroke-linejoin="round">
-    <polygon points="12.71,3.96 28.29,6.44 19.29,10.74 3.71,8.26" fill="#f5e6a8" />
-    <polygon points="3.71,8.26 19.29,10.74 19.29,28.04 3.71,25.56" fill="#ecd575" />
-    <polygon points="19.29,10.74 28.29,6.44 28.29,23.74 19.29,28.04" fill="#ddc054" />
+  <g stroke="#a3a39c" stroke-width="0.4" stroke-linejoin="round">
+    <polygon points="12.71,3.96 28.29,6.44 19.29,10.74 3.71,8.26" fill="#f1f1ee" />
+    <polygon points="3.71,8.26 19.29,10.74 19.29,28.04 3.71,25.56" fill="#d6d6d1" />
+    <polygon points="19.29,10.74 28.29,6.44 28.29,23.74 19.29,28.04" fill="#c2c2bc" />
+  </g>
+  <g stroke="#8f8f88" stroke-width="0.9" stroke-linecap="round">
+    <line x1="11.5" y1="14.9" x2="11.5" y2="21.4" />
+    <line x1="8.25" y1="18.15" x2="14.75" y2="18.15" />
+    <line x1="9.4" y1="16.05" x2="13.6" y2="20.25" />
+    <line x1="13.6" y1="16.05" x2="9.4" y2="20.25" />
   </g>
 </svg>
