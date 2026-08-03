@@ -31,14 +31,6 @@ export function Nav() {
         </Link>
         <div className="flex items-center gap-4 text-[13px] font-medium tracking-wide sm:gap-5">
           <LiveClock />
-          {!isHome && (
-            <Link
-              href="/"
-              className="text-subtle transition-colors hover:text-foreground"
-            >
-              Work
-            </Link>
-          )}
           <Link
             href="/about"
             className={

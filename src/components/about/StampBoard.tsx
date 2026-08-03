@@ -7,7 +7,7 @@ import { Stamp } from "./Stamp";
 // a wide, short spread instead of a tall stack. Left offset and rotation
 // vary per stamp for a scattered, tossed-on-a-desk feel.
 const COLS = [3, 26, 49, 72];
-const ROWS = [14, 56];
+const ROWS = [6, 55];
 
 const STAMPS = [
   { label: "Tennis", imageSrc: "/media/about/stamp-tennis.webp", left: `${COLS[0]}%`, top: `${ROWS[0]}%`, rotate: -6 },
@@ -45,11 +45,8 @@ export function StampBoard() {
   return (
     <div
       ref={boardRef}
-      className="relative h-[250px] w-full rounded-3xl border border-border bg-[#ececea] sm:h-[540px]"
+      className="relative h-[225px] w-full rounded-3xl border border-border bg-[#f3f2f0] sm:h-[490px]"
     >
-      <p className="pointer-events-none absolute left-5 top-4 z-10 font-grotesk text-[10px] uppercase tracking-[0.2em] text-subtle">
-        Drag to rearrange
-      </p>
       {STAMPS.map((s) => (
         <Stamp
           key={s.label}
