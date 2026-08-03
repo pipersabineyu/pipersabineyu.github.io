@@ -36,7 +36,10 @@ function StampFrame({ width, height }: { width: number; height: number }) {
   }
 
   return (
-    <div className="absolute inset-0" style={{ filter: "drop-shadow(0 8px 14px rgba(30,28,25,0.2))" }}>
+    <div
+      className="absolute inset-0"
+      style={{ filter: "drop-shadow(0 8px 14px rgba(30,28,25,0.2))", transform: "translateZ(0)" }}
+    >
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
         <mask id={id}>
           <rect x={0} y={0} width={width} height={height} rx={CORNER_RADIUS} fill="white" />
@@ -148,13 +151,24 @@ export function Stamp({
           dragging ? 1.1 : hovered ? 1.06 : 1
         })`,
         transition: dragging ? "none" : "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+        // Safari/WebKit has a long-standing bug where an element with a CSS
+        // filter (the drop-shadow below, on a child) leaves behind a smeared
+        // trail when its transformed ancestor moves quickly — will-change
+        // forces this into its own persistent compositing layer up front so
+        // it moves as one unit instead of being re-rasterized per frame.
+        willChange: "transform",
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
       }}
       onPointerDown={onPointerDown}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       {imageSrc ? (
-        <div className="absolute inset-0" style={{ filter: "drop-shadow(0 8px 14px rgba(30,28,25,0.2))" }}>
+        <div
+          className="absolute inset-0"
+          style={{ filter: "drop-shadow(0 8px 14px rgba(30,28,25,0.2))", transform: "translateZ(0)" }}
+        >
           <img
             src={imageSrc}
             alt={label}
