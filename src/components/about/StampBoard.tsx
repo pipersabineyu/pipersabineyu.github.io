@@ -3,20 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import { Stamp } from "./Stamp";
 
-// Both columns share the same four row-tops (~25% apart, stamps are ~22%
-// tall) so nothing overlaps vertically — left offset and rotation vary per
-// stamp for a scattered, tossed-on-a-desk feel without risking collisions.
-const ROWS = [2, 27, 52, 77];
+// Four columns share the same two row-tops so nothing overlaps vertically —
+// a wide, short spread instead of a tall stack. Left offset and rotation
+// vary per stamp for a scattered, tossed-on-a-desk feel.
+const COLS = [3, 26, 49, 72];
+const ROWS = [4, 54];
 
 const STAMPS = [
-  { label: "Tennis", imageSrc: "/media/about/stamp-tennis.webp", left: "8%", top: `${ROWS[0]}%`, rotate: -6 },
-  { label: "Running", imageSrc: "/media/about/stamp-running.webp", left: "58%", top: `${ROWS[0]}%`, rotate: 5 },
-  { label: "Pottery", imageSrc: "/media/about/stamp-pottery.webp", left: "6%", top: `${ROWS[1]}%`, rotate: 4 },
-  { label: "Bouquet", imageSrc: "/media/about/stamp-bouquet.webp", left: "56%", top: `${ROWS[1]}%`, rotate: -5 },
-  { label: "Crochet", imageSrc: "/media/about/stamp-crochet.webp", left: "9%", top: `${ROWS[2]}%`, rotate: -4 },
-  { label: "Surfboard wipeout", imageSrc: "/media/about/stamp-wipeout.webp", left: "59%", top: `${ROWS[2]}%`, rotate: 6 },
-  { label: "Can't bake", imageSrc: "/media/about/stamp-baking.webp", left: "7%", top: `${ROWS[3]}%`, rotate: -3 },
-  { label: "Opera singer", imageSrc: "/media/about/stamp-opera.webp", left: "57%", top: `${ROWS[3]}%`, rotate: 4 },
+  { label: "Tennis", imageSrc: "/media/about/stamp-tennis.webp", left: `${COLS[0]}%`, top: `${ROWS[0]}%`, rotate: -6 },
+  { label: "Running", imageSrc: "/media/about/stamp-running.webp", left: `${COLS[1]}%`, top: `${ROWS[0]}%`, rotate: 5 },
+  { label: "Pottery", imageSrc: "/media/about/stamp-pottery.webp", left: `${COLS[2]}%`, top: `${ROWS[0]}%`, rotate: -4 },
+  { label: "Bouquet", imageSrc: "/media/about/stamp-bouquet.webp", left: `${COLS[3]}%`, top: `${ROWS[0]}%`, rotate: 6 },
+  { label: "Crochet", imageSrc: "/media/about/stamp-crochet.webp", left: `${COLS[0]}%`, top: `${ROWS[1]}%`, rotate: 4 },
+  { label: "Surfboard wipeout", imageSrc: "/media/about/stamp-wipeout.webp", left: `${COLS[1]}%`, top: `${ROWS[1]}%`, rotate: -5 },
+  { label: "Can't bake", imageSrc: "/media/about/stamp-baking.webp", left: `${COLS[2]}%`, top: `${ROWS[1]}%`, rotate: 5 },
+  { label: "Opera singer", imageSrc: "/media/about/stamp-opera.webp", left: `${COLS[3]}%`, top: `${ROWS[1]}%`, rotate: -3 },
 ];
 
 // Two size presets rather than a fluid scale — the SVG perforation math
@@ -28,7 +29,7 @@ function useStampSize() {
   useEffect(() => {
     const update = () =>
       setSize(
-        window.innerWidth < 640 ? { width: 108, height: 144 } : { width: 156, height: 208 }
+        window.innerWidth < 640 ? { width: 68, height: 90 } : { width: 156, height: 208 }
       );
     update();
     window.addEventListener("resize", update);
@@ -44,7 +45,7 @@ export function StampBoard() {
   return (
     <div
       ref={boardRef}
-      className="relative h-[680px] w-full rounded-3xl border border-border bg-[#ececea] sm:h-[860px]"
+      className="relative h-[220px] w-full rounded-3xl border border-border bg-[#ececea] sm:h-[500px]"
     >
       <p className="pointer-events-none absolute left-5 top-4 z-10 font-grotesk text-[10px] uppercase tracking-[0.2em] text-subtle">
         Drag to rearrange
