@@ -90,9 +90,19 @@ export function LoadingScreen() {
   // Text sits a fixed gap below the cube's bottom edge, regardless of the
   // text's own line-box height. Mobile subtracts the pb-28 shift (below)
   // since that moves the cube's center up relative to true viewport-center.
+  //
+  // The cube's true half-height is NOT half its edge length — it's rotating
+  // (ry sweeps the full circle during the free-spin) and rendered with real
+  // CSS perspective, both of which push its projected bounding box well
+  // past a flat cross-section. Numerically sweeping every ry at the fixed
+  // rx=-16 this cube uses gives a worst-case screen-space half-height of
+  // ~0.70x the edge length (rising toward ~0.78x with perspective at larger
+  // sizes); 0.8 gives headroom for the asymmetric perspective-origin
+  // ('50% 46%', not dead center) on top of that measured worst case.
+  const CUBE_HALF_HEIGHT_RATIO = 0.8;
   const textTopOffset = isMobile
-    ? activeMiniSize / 2 + TEXT_GAP - MOBILE_SHIFT
-    : activeMiniSize / 2 + TEXT_GAP;
+    ? activeMiniSize * CUBE_HALF_HEIGHT_RATIO + TEXT_GAP - MOBILE_SHIFT
+    : activeMiniSize * CUBE_HALF_HEIGHT_RATIO + TEXT_GAP;
 
   const play = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
