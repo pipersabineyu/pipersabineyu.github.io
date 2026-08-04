@@ -27,8 +27,12 @@ function exitFadeAt(p: number) {
   return 1 - Math.min(1, p / 0.3);
 }
 
+// bottom-20 (not bottom-12) plus env(safe-area-inset-bottom) — on tablets the
+// old 48px sat close enough to the true edge that browser chrome/the safe
+// area could eat into it, requiring a scroll to see the rest of the text
+// even though nothing was actually overlapping the cube above it.
 const blockPosition =
-  "absolute inset-x-0 bottom-12 px-6 text-center " +
+  "absolute inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] px-6 text-center " +
   "lg:inset-x-auto lg:bottom-auto lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:px-0 lg:text-left";
 
 function ReplayButton() {

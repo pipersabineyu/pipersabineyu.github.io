@@ -48,8 +48,9 @@ function useLayerOpacity(progress: MotionValue<number>, i: number) {
 const SIDE_BY_SIDE_MIN_WIDTH = 1024;
 // FixedUI's left-8 (32px) + its max-w-[280px] text column, side-by-side.
 const TEXT_RIGHT_EDGE = 312;
-// Stacked layout: ~bottom-12 (48px) + the two-line intro/work text block.
-const TEXT_BLOCK_HEIGHT = 102;
+// Stacked layout: FixedUI's bottom offset (80px + a safe-area allowance) +
+// the two-line intro/work text block.
+const TEXT_BLOCK_HEIGHT = 140;
 const SAFETY_MARGIN = 28;
 
 // The cube is draggable up to rx=±78°, and ry freely — at extreme angles

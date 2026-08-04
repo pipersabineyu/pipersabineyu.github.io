@@ -38,7 +38,7 @@ function easeOutQuint(t: number) {
 // at. If that formula changes, this one needs to change with it.
 const SIDE_BY_SIDE_MIN_WIDTH = 1024;
 const TEXT_RIGHT_EDGE = 312;
-const TEXT_BLOCK_HEIGHT = 102;
+const TEXT_BLOCK_HEIGHT = 140;
 const CUBE_SAFETY_MARGIN = 28;
 const WORST_X_RATIO = 0.85;
 const WORST_Y_RATIO = 0.9;
