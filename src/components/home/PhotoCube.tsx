@@ -50,6 +50,11 @@ export interface PhotoCubeProps {
   settleDuration?: number;
   /** Allow pointer drag to rotate. Default true. Works alongside `progress`. */
   draggable?: boolean;
+  /** Bump this (e.g. a counter) to snap any accumulated drag offset back to
+   * zero — drag momentum decays but the offset itself never resets on its
+   * own, so a dragged cube stays dragged forever otherwise. Use this to
+   * force the cube back to its base orientation on a "replay" affordance. */
+  resetSignal?: number | string;
   /** Film grain amount, 0–70. Default 26. */
   grain?: number;
   /** Contrast multiplier applied with grayscale. Default 1.18. */
@@ -211,6 +216,7 @@ export default function PhotoCube({
   spinSpeed = 0.22,
   settleDuration = 450,
   draggable = true,
+  resetSignal,
   grain = 14,
   contrast = 1.18,
   zoomRange = 3.4,
@@ -237,6 +243,15 @@ export default function PhotoCube({
   // "still following progress" (an ordinary scroll update).
   const wasScrollDriven = useRef(false);
   const settleRaf = useRef(0);
+
+  useEffect(() => {
+    if (resetSignal === undefined) return;
+    dragging.current = false;
+    offset.current.rx = 0;
+    offset.current.ry = 0;
+    offset.current.vx = 0;
+    offset.current.vy = 0;
+  }, [resetSignal]);
 
   useEffect(() => {
     if (!hasScroll) {

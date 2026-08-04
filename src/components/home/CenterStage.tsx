@@ -111,12 +111,28 @@ function DesignLayer({
     setCubeProgress(Math.min(1, Math.max(0, latest / SEG)));
   });
 
+  // "Replay intro" only restarts the loading screen's own mini cube — this is
+  // the real cube underneath, which otherwise keeps whatever drag offset the
+  // user left it at forever (drag momentum decays, but the offset itself
+  // never resets on its own). Snap it back to its base orientation in sync.
+  const [resetSignal, setResetSignal] = useState(0);
+  useEffect(() => {
+    const handler = () => setResetSignal((n) => n + 1);
+    window.addEventListener("piper:replay-intro", handler);
+    return () => window.removeEventListener("piper:replay-intro", handler);
+  }, []);
+
   return (
     <div
       className="absolute inset-0 flex items-center justify-center pb-28 lg:pb-0"
       style={{ opacity, pointerEvents: opacity > 0.02 ? "auto" : "none" }}
     >
-      <PhotoCube src={imageSrc} progress={cubeProgress} size={size} />
+      <PhotoCube
+        src={imageSrc}
+        progress={cubeProgress}
+        size={size}
+        resetSignal={resetSignal}
+      />
     </div>
   );
 }
