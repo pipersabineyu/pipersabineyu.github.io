@@ -29,7 +29,7 @@ function exitFadeAt(p: number) {
 
 const blockPosition =
   "absolute inset-x-0 bottom-12 px-6 text-center " +
-  "sm:inset-x-auto sm:bottom-auto sm:left-8 sm:top-1/2 sm:-translate-y-1/2 sm:px-0 sm:text-left";
+  "lg:inset-x-auto lg:bottom-auto lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:px-0 lg:text-left";
 
 function ReplayButton() {
   return (
@@ -98,10 +98,10 @@ export function FixedUI({
         <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">
           Who I am <span className="text-subtle/70">· 00/{String(projects.length).padStart(2, "0")}</span>
         </p>
-        <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground sm:mx-0">
+        <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground lg:mx-0">
           Designer who tinkers, creates, and ships production-ready code.
         </p>
-        <div className="hidden sm:flex sm:justify-start">
+        <div className="hidden lg:flex lg:justify-start">
           <ReplayButton />
         </div>
       </div>
@@ -122,7 +122,7 @@ export function FixedUI({
         </p>
         <Link
           href={`/work/${current.slug}`}
-          className="mx-auto mt-3 block max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground sm:mx-0"
+          className="mx-auto mt-3 block max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground lg:mx-0"
         >
           {current.title}
         </Link>

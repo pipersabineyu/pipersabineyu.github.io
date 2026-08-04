@@ -31,12 +31,33 @@ function easeOutQuint(t: number) {
   return 1 - Math.pow(1 - t, 5);
 }
 
-// Same formula as CenterStage's useCubeSize, so the cube grows into exactly
-// the size the real homepage cube will be at.
+// Same formula as CenterStage's useCubeSize (including its safety cap that
+// shrinks the cube on narrower side-by-side breakpoints so a fully-dragged
+// cube there can never reach the fixed text) — kept in exact sync so the
+// loading cube grows into precisely the size the real homepage cube will be
+// at. If that formula changes, this one needs to change with it.
+const SIDE_BY_SIDE_MIN_WIDTH = 1024;
+const TEXT_RIGHT_EDGE = 312;
+const TEXT_BLOCK_HEIGHT = 102;
+const CUBE_SAFETY_MARGIN = 28;
+const WORST_X_RATIO = 0.85;
+const WORST_Y_RATIO = 0.9;
+
 function useCubeTargetSize() {
   const [size, setSize] = useState(420);
   useEffect(() => {
-    const update = () => setSize(Math.min(420, window.innerWidth * 0.68));
+    const update = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const preferred = Math.min(420, vw * 0.68);
+
+      const safeCap =
+        vw < SIDE_BY_SIDE_MIN_WIDTH
+          ? (vh / 2 - 56 - TEXT_BLOCK_HEIGHT - CUBE_SAFETY_MARGIN) / WORST_Y_RATIO
+          : (vw / 2 - TEXT_RIGHT_EDGE - CUBE_SAFETY_MARGIN) / WORST_X_RATIO;
+
+      setSize(Math.max(120, Math.min(preferred, safeCap)));
+    };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
@@ -44,18 +65,33 @@ function useCubeTargetSize() {
   return size;
 }
 
-// On phones the cube read as muddy (photo tiles are illegible at that size
-// after the crop) and crowded the percentage — mobile gets just the number,
-// larger breakpoints keep the cube. Matches Tailwind's `sm` breakpoint.
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+// Phones get a slightly smaller mini cube (see MOBILE_MINI_SIZE) — purely
+// cosmetic, independent of the layout-shift concern below. Matches
+// Tailwind's `sm` breakpoint.
+function useIsPhone() {
+  const [isPhone, setIsPhone] = useState(false);
   useEffect(() => {
-    const update = () => setIsMobile(window.innerWidth < 640);
+    const update = () => setIsPhone(window.innerWidth < 640);
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
-  return isMobile;
+  return isPhone;
+}
+
+// Whether the cube's own container currently has the pb-28 shift applied
+// (see the JSX below) — must track CenterStage's SIDE_BY_SIDE_MIN_WIDTH
+// (Tailwind's `lg` breakpoint) exactly, since the text-gap math needs to
+// know precisely how far the shift moved the cube's center.
+function useIsStacked() {
+  const [isStacked, setIsStacked] = useState(false);
+  useEffect(() => {
+    const update = () => setIsStacked(window.innerWidth < 1024);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return isStacked;
 }
 
 export function LoadingScreen() {
@@ -67,9 +103,10 @@ export function LoadingScreen() {
   const targetSize = useCubeTargetSize();
   const targetSizeRef = useRef(targetSize);
   targetSizeRef.current = targetSize;
-  const isMobile = useIsMobile();
+  const isPhone = useIsPhone();
+  const isStacked = useIsStacked();
 
-  const activeMiniSize = isMobile ? MOBILE_MINI_SIZE : MINI_SIZE;
+  const activeMiniSize = isPhone ? MOBILE_MINI_SIZE : MINI_SIZE;
   const activeMiniSizeRef = useRef(activeMiniSize);
   activeMiniSizeRef.current = activeMiniSize;
 
@@ -100,7 +137,7 @@ export function LoadingScreen() {
   // sizes); 0.8 gives headroom for the asymmetric perspective-origin
   // ('50% 46%', not dead center) on top of that measured worst case.
   const CUBE_HALF_HEIGHT_RATIO = 0.8;
-  const textTopOffset = isMobile
+  const textTopOffset = isStacked
     ? activeMiniSize * CUBE_HALF_HEIGHT_RATIO + TEXT_GAP - MOBILE_SHIFT
     : activeMiniSize * CUBE_HALF_HEIGHT_RATIO + TEXT_GAP;
 
@@ -174,7 +211,7 @@ export function LoadingScreen() {
               and — via the progress handoff in PhotoCube — orientation the
               real homepage cube starts at, at every breakpoint. Mobile uses
               a slightly smaller mini size (see MOBILE_MINI_SIZE). */}
-          <div className="absolute inset-0 flex items-center justify-center pb-28 sm:pb-0">
+          <div className="absolute inset-0 flex items-center justify-center pb-28 lg:pb-0">
             <PhotoCube
               src={CUBE_IMAGE_SRC}
               size={cubeSize}
