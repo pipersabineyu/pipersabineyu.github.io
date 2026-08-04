@@ -74,7 +74,7 @@ export function StampBoard() {
   return (
     <div
       ref={boardRef}
-      className="relative w-full rounded-3xl border border-border bg-[#f3f2f0]"
+      className="relative w-full rounded-3xl border border-border bg-surface"
       style={{ height: boardHeight }}
     >
       {STAMP_DATA.map((s, i) => (

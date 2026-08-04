@@ -1,6 +1,17 @@
 export type ProjectSection = {
   heading: string;
-  body: string[];
+  body?: string[];
+  // "quote" renders as a centered pull-quote break instead of a normal
+  // section. "challenges" renders `challenges` as a numbered card grid
+  // after any intro body copy — for surfacing several distinct problems
+  // at once instead of one long paragraph.
+  kind?: "quote" | "challenges";
+  quote?: string;
+  challenges?: { title: string; body: string }[];
+  // Optional before/after chips rendered under the body copy, for making
+  // a value proposition ("old mental model" → "new one") concrete.
+  stateBefore?: string;
+  stateAfter?: string;
 };
 
 export type ProjectMedia = {
@@ -54,7 +65,7 @@ export const projects: Project[] = [
         src: "/media/stitch-ai/clip-2-generate.mp4",
         poster: "/media/stitch-ai/clip-2-generate.jpg",
         caption: "Choosing a direction and generating a first script.",
-        after: "Design decisions",
+        after: "The idea",
       },
       {
         kind: "phone",
@@ -68,21 +79,40 @@ export const projects: Project[] = [
       {
         heading: "The problem",
         body: [
-          "Beginners struggle to tell stories from their moments. Everyone captures footage — photos, videos, voice notes — but for a first-time creator, the barrier was never the editing.",
-          "“The problem isn't editing, the problem is they don't have a story.”",
+          "Everyone captures footage — photos, videos, voice notes. But for a first-time creator, the barrier was never the editing.",
         ],
+      },
+      {
+        heading: "",
+        kind: "quote",
+        quote: "The problem isn't editing. The problem is they don't have a story.",
       },
       {
         heading: "The idea",
         body: [
-          "Stitch lets you dump all your ideas — notes, moments, media, and messy thoughts — and generates a script from them.",
-          "From there, you edit your video by editing the script, instead of wrangling an intimidating timeline. And the tool is built to work with the footage you already have, not to demand reshoots.",
+          "Stitch lets you dump everything you have — notes, moments, media, and messy thoughts — and turns it into a script. Instead of staring at a blank page, you get a story pulled straight from your own chaos.",
+          "From there, you shape the video by editing the script, not a timeline. And it's built to work with the footage you already have, not to demand reshoots.",
         ],
+        stateBefore: "An intimidating timeline, built for editors.",
+        stateAfter: "A script anyone can read, rewrite, and understand.",
       },
       {
         heading: "What made it hard",
-        body: [
-          "Three things kept surfacing in testing: people never have enough B-roll and can't reshoot a moment that's already passed; creators don't trust AI-generated content that feels generic or inauthentic; and when the creative task feels endless, beginners just give up before finishing.",
+        kind: "challenges",
+        body: ["Three things kept surfacing in testing."],
+        challenges: [
+          {
+            title: "Never enough footage",
+            body: "People don't have B-roll on hand, and they can't rewind real life to reshoot a moment that's already passed.",
+          },
+          {
+            title: "AI nobody trusts yet",
+            body: "Creators are wary of content that feels generic or inauthentic — suggestions had to come from their own footage and words, not invented ones.",
+          },
+          {
+            title: "Momentum, not overwhelm",
+            body: "When a creative task feels endless, beginners give up before they finish. Progress needed to feel visible almost immediately.",
+          },
         ],
       },
       {
