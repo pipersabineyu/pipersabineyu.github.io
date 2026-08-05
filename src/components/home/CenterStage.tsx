@@ -147,11 +147,11 @@ function ProjectPrototypes({
   clips: [{ src: string; poster: string }, { src: string; poster: string }];
 }) {
   return (
-    <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-5 sm:gap-8">
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-6 sm:gap-10">
       {clips.map((clip) => (
         <div
           key={clip.src}
-          className="relative aspect-[9/19.5] h-[78%] max-h-[320px] overflow-hidden rounded-[1.6rem] border-[3px] border-white shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55)]"
+          className="relative aspect-[9/19.5] h-[92%] max-h-[420px] overflow-hidden rounded-[1.8rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55)]"
         >
           <video
             className="h-full w-full object-cover"
@@ -186,14 +186,14 @@ function ProjectLayer({
     >
       <Link
         href={`/work/${project.slug}`}
-        className="relative block aspect-[4/3] w-full max-w-2xl overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(20,20,20,0.3)]"
+        className="relative block aspect-[4/3] w-full max-w-3xl overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(20,20,20,0.3)]"
         style={{ cursor: OPEN_CURSOR }}
       >
         <Image
           src={project.cover}
           alt=""
           fill
-          sizes="(min-width: 1024px) 700px, 90vw"
+          sizes="(min-width: 1024px) 768px, 90vw"
           className={`object-cover ${prototypes ? "scale-110 blur-md" : ""}`}
         />
         {prototypes && <ProjectPrototypes clips={prototypes} />}
