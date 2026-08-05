@@ -37,15 +37,15 @@ function PhoneStage({ items }: { items: ProjectMedia[] }) {
     <FadeIn>
       <div className="my-8 rounded-3xl border border-border bg-surface px-6 py-10 sm:px-10 sm:py-14">
         <div
-          className={`mx-auto grid grid-cols-1 gap-8 ${
+          className={`mx-auto grid grid-cols-1 gap-x-10 gap-y-12 ${
             items.length > 1 ? "max-w-xl sm:grid-cols-2" : "max-w-[260px]"
           }`}
         >
           {items.map((m) => (
-            <figure key={m.src} className="flex flex-col items-center gap-3">
+            <figure key={m.src} className="flex flex-col items-center gap-5">
               <PhoneFrame src={m.src} poster={m.poster} />
               {m.caption && (
-                <figcaption className="max-w-[220px] text-center text-[12px] leading-relaxed text-subtle">
+                <figcaption className="max-w-[240px] text-center text-[12px] leading-relaxed text-subtle">
                   {m.caption}
                 </figcaption>
               )}
@@ -58,31 +58,31 @@ function PhoneStage({ items }: { items: ProjectMedia[] }) {
 }
 
 // Reserved for content that isn't a UI screen recording at all — an
-// animatic, process footage — so it reads as a different kind of artifact
-// rather than another phone screenshot. Wide, on its own near-black stage,
-// deliberately unlike the light gray phone stage above.
-function ContextStage({ item }: { item: ProjectMedia }) {
+// animatic, process footage. No stage, no border — just a heading (media
+// items carry their own since they often attach after a quote section,
+// which has no visible heading) and the video playing plainly underneath.
+function ContextMedia({ item }: { item: ProjectMedia }) {
   return (
     <FadeIn>
-      <div className="my-8 overflow-hidden rounded-3xl border border-border bg-[#161513]">
-        <p className="px-6 pt-6 font-grotesk text-[11px] uppercase tracking-[0.14em] text-white/40 sm:px-10">
-          Context, not a prototype
-        </p>
-        <div className="mx-auto mt-4 max-w-xl px-6 sm:px-10">
-          <video
-            className="w-full rounded-xl"
-            src={item.src}
-            poster={item.poster}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        </div>
+      <div className="my-8">
+        {item.heading && (
+          <h3 className="mb-4 font-grotesk text-[15px] font-medium text-foreground">
+            {item.heading}
+          </h3>
+        )}
+        <video
+          className="w-full rounded-2xl"
+          src={item.src}
+          poster={item.poster}
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
         {item.caption && (
-          <figcaption className="px-6 pb-8 pt-4 text-[12px] leading-relaxed text-white/60 sm:px-10">
+          <p className="mt-3 text-[12px] leading-relaxed text-subtle">
             {item.caption}
-          </figcaption>
+          </p>
         )}
       </div>
     </FadeIn>
@@ -91,7 +91,7 @@ function ContextStage({ item }: { item: ProjectMedia }) {
 
 function MediaGroup({ items }: { items: ProjectMedia[] }) {
   const context = items.find((m) => m.kind === "context");
-  if (context) return <ContextStage item={context} />;
+  if (context) return <ContextMedia item={context} />;
 
   const phones = items.filter((m) => m.kind === "phone");
   if (phones.length > 0) return <PhoneStage items={phones} />;

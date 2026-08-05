@@ -24,13 +24,17 @@ export type ProjectSection = {
 export type ProjectMedia = {
   // "phone" = an actual UI screen recording, phone-framed, on the gray
   // stage. "context" = something that isn't a UI prototype at all (an
-  // animatic, process footage) — shown wide, on its own dark stage, so it
-  // reads as a different kind of artifact rather than another screenshot.
-  // "image" = a static image grid (used by non-video case studies).
+  // animatic, process footage) — shown plainly, full-width, under its own
+  // heading, so it reads as a different kind of artifact rather than
+  // another screenshot. "image" = a static image grid (non-video studies).
   kind: "phone" | "context" | "image";
   src: string;
   poster?: string;
   caption?: string;
+  // Heading shown directly above a "context" video — since it often
+  // attaches after a quote-kind section (which has no visible heading of
+  // its own), the video needs one that isn't borrowed from a section.
+  heading?: string;
   after: string;
 };
 
@@ -69,37 +73,38 @@ export const projects: Project[] = [
         kind: "context",
         src: "/media/stitch-ai/animatic.mp4",
         poster: "/media/stitch-ai/animatic.jpg",
+        heading: "Sketching the hypothesis by hand",
         caption:
-          "An animatic we sketched by hand to pressure-test the hypothesis before writing a line of code.",
+          "An animatic we sketched to pressure-test the hypothesis before writing a line of code.",
         after: "The hypothesis",
-      },
-      {
-        kind: "phone",
-        src: "/media/stitch-ai/concept-dump.mp4",
-        poster: "/media/stitch-ai/concept-dump.jpg",
-        caption: "A voice note about a trip becomes the raw material for a script.",
-        after: "Talking it out for the problem of the blank page",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/dump-media-a.mp4",
         poster: "/media/stitch-ai/dump-media-a.jpg",
         caption: "Dump in photos and video, in whatever order they actually happened.",
-        after: "Talking it out for the problem of the blank page",
+        after: "Dumping whatever you've got for the problem of the blank page",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/dump-media-b.mp4",
         poster: "/media/stitch-ai/dump-media-b.jpg",
         caption: "Or just type. Nothing has to be photographed to count.",
-        after: "Talking it out for the problem of the blank page",
+        after: "Dumping whatever you've got for the problem of the blank page",
+      },
+      {
+        kind: "phone",
+        src: "/media/stitch-ai/concept-dump.mp4",
+        poster: "/media/stitch-ai/concept-dump.jpg",
+        caption: "A voice note about a trip becomes the raw material for a script.",
+        after: "Talking it out for the problem of losing detail",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/brainstorm-a.mp4",
         poster: "/media/stitch-ai/brainstorm-a.jpg",
-        caption: "Or talk it out — the brainstorm room turns rambling into a structured note.",
-        after: "Talking it out for the problem of the blank page",
+        caption: "The brainstorm room turns rambling into a structured note.",
+        after: "Talking it out for the problem of losing detail",
       },
       {
         kind: "phone",
@@ -159,24 +164,24 @@ export const projects: Project[] = [
         ],
         cards: [
           {
-            title: "Apps simplified the timeline, not the story",
-            body: "TikTok, Instagram, and their peers made editing more approachable by stripping the interface down. That solved friction, not the blank page.",
+            title: "Apps like TikTok and Instagram tried to simplify the editing timeline",
+            body: "We found most video-storytelling apps try to simplify by stripping down the UI for simplicity.",
           },
           {
-            title: "AI editors automated cuts, not storytelling",
-            body: "Newer AI tools got good at trimming and syncing footage automatically — but what to say, and in what order, was still entirely on the user.",
+            title: "Emerging AI video editors focused solely on automating editing",
+            body: "Automation helped with cuts and clips, but left the process of storytelling to the user.",
           },
           {
-            title: "The best videos were never about editing skill",
-            body: "Looking at creators people actually love watching, the throughline wasn't production value. It was that they had something to say.",
+            title: "The best videos weren't based on editing skills — they were based on the story",
+            body: "What matters at the core of a video isn't the flashy edits or camera equipment. It was the story.",
           },
         ],
       },
       {
         heading: "The hypothesis",
-        navLabel: "Pivot",
+        navLabel: "Hypothesis",
         kind: "quote",
-        quote: "The real barrier isn't editing. It's storytelling.",
+        quote: "The real barrier isn't learning editing tools. It's helping people find a story worth telling.",
       },
       {
         heading: "The solution",
@@ -188,11 +193,17 @@ export const projects: Project[] = [
         stateAfter: "A script anyone can read, rewrite, and understand.",
       },
       {
-        heading: "Talking it out for the problem of the blank page",
-        navLabel: "Script",
+        heading: "Dumping whatever you've got for the problem of the blank page",
+        navLabel: "Media dump",
         body: [
-          "Writing a script from nothing is the hardest part, so we never ask for one. Dump in photos, video, notes, or just talk it out, and AI turns that into a first script — then you pick a direction from there.",
-          "Talking it out mattered more than we expected: people surfaced far more detail rambling out loud than typing a note, so the brainstorm room became as central to this step as uploading media.",
+          "Writing a script from nothing is the hardest part, so we never ask for one. Photos, video, or plain typed notes — none of it has to be curated first. AI turns whatever you dump in into a first script, then you pick a direction from there.",
+        ],
+      },
+      {
+        heading: "Talking it out for the problem of losing detail",
+        navLabel: "Talking it out",
+        body: [
+          "People surfaced far more detail rambling out loud than typing a note, so the brainstorm room lets you just talk. AI asks the follow-up questions a blank text field never would, then turns the conversation into a structured script.",
         ],
       },
       {
@@ -205,7 +216,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Editing a sentence for the problem of editing a timeline",
-        navLabel: "Editing",
+        navLabel: "Script editing",
         body: [
           "This is a storytelling tool before it's an editing tool, so editing had to happen at the level of a sentence, not a frame. Rewrite a line and the video follows — no timeline, no clips to hunt down.",
           "AI stays scoped to exactly what you gave it — generating video from your own photos, batch-editing your own script — rather than inventing anything from nothing.",
