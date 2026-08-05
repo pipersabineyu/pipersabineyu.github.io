@@ -58,18 +58,13 @@ function PhoneStage({ items }: { items: ProjectMedia[] }) {
 }
 
 // Reserved for content that isn't a UI screen recording at all — an
-// animatic, process footage. No stage, no border — just a heading (media
-// items carry their own since they often attach after a quote section,
-// which has no visible heading) and the video playing plainly underneath.
+// animatic, process footage. No stage, no border, no heading or caption
+// of its own — just the video, playing plainly under whatever section
+// heading it's attached to.
 function ContextMedia({ item }: { item: ProjectMedia }) {
   return (
     <FadeIn>
-      <div className="my-8">
-        {item.heading && (
-          <h3 className="mb-4 font-grotesk text-[15px] font-medium text-foreground">
-            {item.heading}
-          </h3>
-        )}
+      <div className="mt-2 mb-8">
         <video
           className="w-full rounded-2xl"
           src={item.src}
@@ -79,11 +74,6 @@ function ContextMedia({ item }: { item: ProjectMedia }) {
           muted
           playsInline
         />
-        {item.caption && (
-          <p className="mt-3 text-[12px] leading-relaxed text-subtle">
-            {item.caption}
-          </p>
-        )}
       </div>
     </FadeIn>
   );

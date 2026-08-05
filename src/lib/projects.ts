@@ -24,17 +24,14 @@ export type ProjectSection = {
 export type ProjectMedia = {
   // "phone" = an actual UI screen recording, phone-framed, on the gray
   // stage. "context" = something that isn't a UI prototype at all (an
-  // animatic, process footage) — shown plainly, full-width, under its own
-  // heading, so it reads as a different kind of artifact rather than
-  // another screenshot. "image" = a static image grid (non-video studies).
+  // animatic, process footage), shown plainly and full-width with no
+  // heading or caption of its own, so it reads as a different kind of
+  // artifact rather than another screenshot. "image" = a static image
+  // grid (non-video studies).
   kind: "phone" | "context" | "image";
   src: string;
   poster?: string;
   caption?: string;
-  // Heading shown directly above a "context" video — since it often
-  // attaches after a quote-kind section (which has no visible heading of
-  // its own), the video needs one that isn't borrowed from a section.
-  heading?: string;
   after: string;
 };
 
@@ -73,9 +70,6 @@ export const projects: Project[] = [
         kind: "context",
         src: "/media/stitch-ai/animatic.mp4",
         poster: "/media/stitch-ai/animatic.jpg",
-        heading: "Sketching the hypothesis by hand",
-        caption:
-          "An animatic we sketched to pressure-test the hypothesis before writing a line of code.",
         after: "We hypothesize the barrier isn't editing, it's storytelling.",
       },
       {
