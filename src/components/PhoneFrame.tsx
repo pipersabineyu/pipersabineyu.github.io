@@ -20,10 +20,13 @@ export function PhoneFrame({
   src,
   poster,
   className = "",
+  showNotch = true,
 }: {
   src: string;
   poster?: string;
   className?: string;
+  /** Dynamic Island pill at the top of the screen. Default true. */
+  showNotch?: boolean;
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -85,10 +88,12 @@ export function PhoneFrame({
             className="h-full w-full object-cover"
           />
         )}
-        <div
-          className="absolute left-1/2 -translate-x-1/2 rounded-full bg-[#141414]"
-          style={{ top: px(8), height: px(20), width: px(80) }}
-        />
+        {showNotch && (
+          <div
+            className="absolute left-1/2 -translate-x-1/2 rounded-full bg-[#141414]"
+            style={{ top: px(8), height: px(20), width: px(80) }}
+          />
+        )}
       </div>
       <div
         className="absolute rounded-l bg-[#141414]"

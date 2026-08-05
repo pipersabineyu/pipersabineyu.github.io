@@ -152,7 +152,7 @@ function ProjectPrototypes({
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-6 sm:gap-10">
       {clips.map((clip) => (
         <div key={clip.src} className="w-[38%] max-w-[200px]">
-          <PhoneFrame src={clip.src} poster={clip.poster} />
+          <PhoneFrame src={clip.src} poster={clip.poster} showNotch={false} />
         </div>
       ))}
     </div>
