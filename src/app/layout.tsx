@@ -5,6 +5,7 @@ import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { profile } from "@/lib/profile";
 
 const figtree = Figtree({
@@ -39,6 +40,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <ReactLenis root options={{ lerp: 0.1, duration: 1.2 }} />
+        <ScrollToTop />
         <LoadingScreen />
         <Nav />
         <main className="flex flex-1 flex-col">{children}</main>
