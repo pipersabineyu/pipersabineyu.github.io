@@ -10,6 +10,11 @@ export type ProjectSection = {
   kind?: "quote" | "challenges" | "insights";
   quote?: string;
   cards?: { title: string; body: string }[];
+  // Short label for the left-side section nav (CaseStudyNav). Non-quote
+  // sections fall back to `heading` if omitted; quote sections are left
+  // out of the nav entirely unless given one explicitly, so a plain pull
+  // quote doesn't clutter the list.
+  navLabel?: string;
   // Optional before/after chips rendered under the body copy, for making
   // a value proposition ("old mental model" → "new one") concrete.
   stateBefore?: string;
@@ -140,6 +145,7 @@ export const projects: Project[] = [
     sections: [
       {
         heading: "The problem",
+        navLabel: "Problem",
         body: [
           "Everyone captures footage — photos, videos, voice notes. But for a first-time creator, the barrier was never the editing.",
         ],
@@ -151,6 +157,7 @@ export const projects: Project[] = [
       },
       {
         heading: "What already existed",
+        navLabel: "Context",
         kind: "insights",
         body: [
           "Before designing anything, we looked at how the existing landscape was already trying to solve this — and where each attempt stopped short.",
@@ -172,11 +179,13 @@ export const projects: Project[] = [
       },
       {
         heading: "The hypothesis",
+        navLabel: "Pivot",
         kind: "quote",
         quote: "The real barrier isn't learning to edit. It's finding a story worth telling.",
       },
       {
         heading: "The idea",
+        navLabel: "Idea",
         body: [
           "Stitch lets you dump everything you have — notes, moments, media, and messy thoughts — and turns it into a script. Instead of staring at a blank page, you get a story pulled straight from your own chaos.",
           "From there, you shape the video by editing the script, not a timeline. And it's built to work with the footage you already have, not to demand reshoots.",
@@ -186,12 +195,14 @@ export const projects: Project[] = [
       },
       {
         heading: "Getting everything in",
+        navLabel: "Process",
         body: [
           "“Dump everything” had to actually mean everything — whichever way an idea first shows up is the way it should be allowed in. We prototyped several entry points side by side: photos and video, plain typed notes, and just talking it out loud.",
         ],
       },
       {
         heading: "What made it hard",
+        navLabel: "Challenges",
         kind: "challenges",
         body: ["Three things kept surfacing in testing."],
         cards: [
@@ -211,18 +222,21 @@ export const projects: Project[] = [
       },
       {
         heading: "Narrative A-roll, not B-roll",
+        navLabel: "A-roll",
         body: [
           "Users film themselves reading or reacting to their own script, so a single narrative clip becomes the backbone of the story — which quietly removes the pressure to have “enough footage.” Existing photos and video fill in the gaps around it, scene by scene, instead of being the thing that has to carry the whole story.",
         ],
       },
       {
         heading: "AI scoped to your own media",
+        navLabel: "AI scope",
         body: [
           "AI is scoped tightly — it operates directly on the user's own media and words, turning an overwhelming task into a handful of manageable steps, like photo-to-video generation and batch script edits, instead of inventing content from nothing.",
         ],
       },
       {
         heading: "What I took away",
+        navLabel: "Reflection",
         body: [
           "Two lessons stuck with me: keep async collaboration succinct so the team doesn't lose the thread between sessions, and when you're pitching a GenAI feature, establish credibility on feasibility early — before the room starts asking whether it's actually possible to ship.",
         ],
@@ -398,6 +412,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Where I focused: the tournament card",
+        navLabel: "Focus",
         body: [
           "The tournament card was by far the most reused component on Digital Pool's platform, which made it a high priority to explore how it could function at scale and accommodate a wide range of data and data types.",
           "Two problems kept showing up: it was too tall to scale across many tournaments, and it broke under real data and content variation.",

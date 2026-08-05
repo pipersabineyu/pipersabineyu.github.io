@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BackButton } from "@/components/BackButton";
+import { CaseStudyNav } from "@/components/CaseStudyNav";
 import { FadeIn } from "@/components/FadeIn";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { profile } from "@/lib/profile";
 import { projects, type Project, type ProjectMedia } from "@/lib/projects";
+
+function sectionId(index: number) {
+  return `section-${index}`;
+}
 
 function MetaItem({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
@@ -196,8 +201,16 @@ export function CaseStudy({ project }: { project: Project }) {
   const next = projects[(index + 1) % projects.length];
   const hero = project.heroImage ?? project.cover;
 
+  const navItems = project.sections
+    .map((s, i) => {
+      const label = s.navLabel ?? (s.kind !== "quote" ? s.heading : undefined);
+      return label && label.trim() ? { id: sectionId(i), label } : null;
+    })
+    .filter((item): item is { id: string; label: string } => item !== null);
+
   return (
     <div className="flex flex-col">
+      <CaseStudyNav items={navItems} />
       <div className="relative h-44 w-full overflow-hidden sm:h-56">
         <Image
           src={hero}
@@ -267,7 +280,7 @@ export function CaseStudy({ project }: { project: Project }) {
             const isQuote = section.kind === "quote" && section.quote;
 
             return (
-              <div key={i}>
+              <div key={i} id={sectionId(i)} className="scroll-mt-28">
                 {isQuote ? (
                   <PullQuote quote={section.quote!} />
                 ) : (
