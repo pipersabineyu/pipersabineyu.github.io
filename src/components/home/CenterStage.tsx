@@ -8,6 +8,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { projects, type Project } from "@/lib/projects";
+import { PhoneFrame } from "@/components/PhoneFrame";
 import PhotoCube from "./PhotoCube";
 import { TOTAL, SEG, MARGIN, segmentOpacity } from "./segmentOpacity";
 
@@ -138,9 +139,10 @@ function DesignLayer({
 }
 
 // Two prototype clips shown upright and spaced apart in front of the
-// blurred cover photo behind them — no tilt, no overlap, playing the
-// actual prototype footage rather than a static screenshot, so the work
-// itself stays the visible, legible thing on the card.
+// blurred cover photo behind them — same PhoneFrame device bezel used on
+// the case study pages, so a prototype reads the same way wherever it
+// shows up on the site, not as a bare clipped rectangle here and a full
+// device frame there.
 function ProjectPrototypes({
   clips,
 }: {
@@ -149,19 +151,8 @@ function ProjectPrototypes({
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-6 sm:gap-10">
       {clips.map((clip) => (
-        <div
-          key={clip.src}
-          className="relative aspect-[9/19.5] h-[92%] max-h-[420px] overflow-hidden rounded-[1.8rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55)]"
-        >
-          <video
-            className="h-full w-full object-cover"
-            src={clip.src}
-            poster={clip.poster}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
+        <div key={clip.src} className="w-[38%] max-w-[200px]">
+          <PhoneFrame src={clip.src} poster={clip.poster} />
         </div>
       ))}
     </div>
