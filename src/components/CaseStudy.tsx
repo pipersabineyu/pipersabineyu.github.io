@@ -11,13 +11,17 @@ function sectionId(index: number) {
   return `section-${index}`;
 }
 
+// The one small-caps "label" treatment used everywhere — meta labels,
+// before/after chips, next-project eyebrow, media captions' context tag.
+// Previously each of these had picked a slightly different tracking value;
+// consolidated to one so the case study reads as one consistent system.
+const EYEBROW = "font-grotesk text-[11px] uppercase tracking-[0.14em] text-subtle";
+
 function MetaItem({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
   return (
     <div>
-      <p className="font-grotesk text-[11px] uppercase tracking-[0.08em] text-subtle">
-        {label}
-      </p>
+      <p className={EYEBROW}>{label}</p>
       <p className="mt-1 text-[13px] leading-relaxed text-foreground">
         {value}
       </p>
@@ -40,14 +44,9 @@ function PhoneStage({ items }: { items: ProjectMedia[] }) {
           {items.map((m) => (
             <figure key={m.src} className="flex flex-col items-center gap-3">
               <PhoneFrame src={m.src} poster={m.poster} />
-              {(m.caption || m.credit) && (
+              {m.caption && (
                 <figcaption className="max-w-[220px] text-center text-[12px] leading-relaxed text-subtle">
                   {m.caption}
-                  {m.credit && (
-                    <span className="mt-1 block text-[10px] uppercase tracking-[0.1em] text-subtle/70">
-                      {m.credit}
-                    </span>
-                  )}
                 </figcaption>
               )}
             </figure>
@@ -66,7 +65,7 @@ function ContextStage({ item }: { item: ProjectMedia }) {
   return (
     <FadeIn>
       <div className="my-8 overflow-hidden rounded-3xl border border-border bg-[#161513]">
-        <p className="px-6 pt-6 font-grotesk text-[10px] uppercase tracking-[0.16em] text-white/40 sm:px-10">
+        <p className="px-6 pt-6 font-grotesk text-[11px] uppercase tracking-[0.14em] text-white/40 sm:px-10">
           Context, not a prototype
         </p>
         <div className="mx-auto mt-4 max-w-xl px-6 sm:px-10">
@@ -80,14 +79,9 @@ function ContextStage({ item }: { item: ProjectMedia }) {
             playsInline
           />
         </div>
-        {(item.caption || item.credit) && (
+        {item.caption && (
           <figcaption className="px-6 pb-8 pt-4 text-[12px] leading-relaxed text-white/60 sm:px-10">
             {item.caption}
-            {item.credit && (
-              <span className="mt-1 block text-[10px] uppercase tracking-[0.1em] text-white/40">
-                {item.credit}
-              </span>
-            )}
           </figcaption>
         )}
       </div>
@@ -176,18 +170,14 @@ function StateShift({ before, after }: { before: string; after: string }) {
   return (
     <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-stretch">
       <div className="flex-1 rounded-2xl border border-border bg-background px-5 py-4">
-        <p className="font-grotesk text-[10px] uppercase tracking-[0.14em] text-subtle">
-          Before
-        </p>
+        <p className={EYEBROW}>Before</p>
         <p className="mt-1.5 text-[13px] leading-relaxed text-muted line-through decoration-border">
           {before}
         </p>
       </div>
       <span className="hidden self-center text-subtle sm:block">→</span>
       <div className="flex-1 rounded-2xl border border-border bg-surface px-5 py-4">
-        <p className="font-grotesk text-[10px] uppercase tracking-[0.14em] text-subtle">
-          After
-        </p>
+        <p className={EYEBROW}>After</p>
         <p className="mt-1.5 text-[13px] leading-relaxed text-foreground">
           {after}
         </p>
@@ -229,9 +219,7 @@ export function CaseStudy({ project }: { project: Project }) {
           <BackButton href="/#work" label="Back to work" />
         </FadeIn>
         <FadeIn delay={0.06}>
-          <p className="mt-6 font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
-            {project.company}
-          </p>
+          <p className={`mt-6 ${EYEBROW}`}>{project.company}</p>
         </FadeIn>
         <FadeIn delay={0.1}>
           <h1 className="mt-3 max-w-2xl font-grotesk text-[clamp(1.6rem,4vw,2.3rem)] font-semibold leading-tight text-foreground">
@@ -286,7 +274,7 @@ export function CaseStudy({ project }: { project: Project }) {
                 ) : (
                   <FadeIn delay={0.04 * i}>
                     <div className="py-6">
-                      <h2 className="font-grotesk text-[14px] font-medium text-foreground">
+                      <h2 className="font-grotesk text-[19px] font-semibold leading-snug text-foreground sm:text-[21px]">
                         {section.heading}
                       </h2>
                       {section.body && (
@@ -329,10 +317,8 @@ export function CaseStudy({ project }: { project: Project }) {
             className="group mt-6 flex items-center justify-between border-t border-border pt-6"
           >
             <div>
-              <p className="font-grotesk text-[11px] uppercase tracking-[0.08em] text-subtle">
-                Next project
-              </p>
-              <p className="mt-1 font-grotesk text-[14px] font-medium text-foreground">
+              <p className={EYEBROW}>Next project</p>
+              <p className="mt-1 font-grotesk text-[15px] font-medium text-foreground">
                 {next.title}
               </p>
             </div>

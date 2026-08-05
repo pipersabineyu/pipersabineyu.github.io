@@ -31,8 +31,6 @@ export type ProjectMedia = {
   src: string;
   poster?: string;
   caption?: string;
-  // Attribution for media made primarily by a teammate rather than Piper.
-  credit?: string;
   after: string;
 };
 
@@ -72,8 +70,7 @@ export const projects: Project[] = [
         src: "/media/stitch-ai/animatic.mp4",
         poster: "/media/stitch-ai/animatic.jpg",
         caption:
-          "An animatic Justin and I sketched by hand to pressure-test the hypothesis before writing a line of code.",
-        credit: "With Justin Kim",
+          "An animatic we sketched by hand to pressure-test the hypothesis before writing a line of code.",
         after: "The hypothesis",
       },
       {
@@ -81,58 +78,56 @@ export const projects: Project[] = [
         src: "/media/stitch-ai/concept-dump.mp4",
         poster: "/media/stitch-ai/concept-dump.jpg",
         caption: "A voice note about a trip becomes the raw material for a script.",
-        after: "The idea",
+        after: "Talking it out for the problem of the blank page",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/dump-media-a.mp4",
         poster: "/media/stitch-ai/dump-media-a.jpg",
         caption: "Dump in photos and video, in whatever order they actually happened.",
-        after: "Getting everything in",
+        after: "Talking it out for the problem of the blank page",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/dump-media-b.mp4",
         poster: "/media/stitch-ai/dump-media-b.jpg",
         caption: "Or just type. Nothing has to be photographed to count.",
-        after: "Getting everything in",
+        after: "Talking it out for the problem of the blank page",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/brainstorm-a.mp4",
         poster: "/media/stitch-ai/brainstorm-a.jpg",
         caption: "Or talk it out — the brainstorm room turns rambling into a structured note.",
-        after: "Getting everything in",
+        after: "Talking it out for the problem of the blank page",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/brainstorm-b.mp4",
         poster: "/media/stitch-ai/brainstorm-b.jpg",
         caption: "Recording the narration that becomes the story's backbone.",
-        after: "Narrative A-roll, not B-roll",
+        after: "A-roll for the problem of not enough footage",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/edge-case.mp4",
         poster: "/media/stitch-ai/edge-case.jpg",
-        caption:
-          "A prototype exploring the exact edge case above: not enough footage, filled in scene by scene.",
-        credit: "Prototyped with Justin Kim",
-        after: "Narrative A-roll, not B-roll",
+        caption: "Not enough footage for a scene — filled in with a photo, scene by scene.",
+        after: "A-roll for the problem of not enough footage",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/edit-script.mp4",
         poster: "/media/stitch-ai/edit-script.jpg",
-        caption: "Editing the story by editing the script, not a timeline.",
-        after: "AI scoped to your own media",
+        caption: "Editing the story by editing a sentence, not hunting down a clip.",
+        after: "Editing a sentence for the problem of editing a timeline",
       },
       {
         kind: "phone",
         src: "/media/stitch-ai/ai-feature.mp4",
         poster: "/media/stitch-ai/ai-feature.jpg",
         caption: "The script it wrote, next to the exact photos it wrote from.",
-        after: "AI scoped to your own media",
+        after: "Editing a sentence for the problem of editing a timeline",
       },
       {
         kind: "phone",
@@ -147,7 +142,7 @@ export const projects: Project[] = [
         heading: "The problem",
         navLabel: "Problem",
         body: [
-          "Everyone captures footage — photos, videos, voice notes. But for a first-time creator, the barrier was never the editing.",
+          "Beginners struggle to tell stories from their moments. Everyone captures footage — photos, videos, voice notes — but for a first-time creator, the barrier was never the editing.",
         ],
       },
       {
@@ -181,57 +176,39 @@ export const projects: Project[] = [
         heading: "The hypothesis",
         navLabel: "Pivot",
         kind: "quote",
-        quote: "The real barrier isn't learning to edit. It's finding a story worth telling.",
+        quote: "The real barrier isn't editing. It's storytelling.",
       },
       {
-        heading: "The idea",
-        navLabel: "Idea",
+        heading: "The solution",
+        navLabel: "Solution",
         body: [
-          "Stitch lets you dump everything you have — notes, moments, media, and messy thoughts — and turns it into a script. Instead of staring at a blank page, you get a story pulled straight from your own chaos.",
-          "From there, you shape the video by editing the script, not a timeline. And it's built to work with the footage you already have, not to demand reshoots.",
+          "Edit your video by letting AI edit the script. Dump in everything you have, get a script back, and shape the story by rewriting it — instead of wrestling with a timeline.",
         ],
         stateBefore: "An intimidating timeline, built for editors.",
         stateAfter: "A script anyone can read, rewrite, and understand.",
       },
       {
-        heading: "Getting everything in",
-        navLabel: "Process",
+        heading: "Talking it out for the problem of the blank page",
+        navLabel: "Script",
         body: [
-          "“Dump everything” had to actually mean everything — whichever way an idea first shows up is the way it should be allowed in. We prototyped several entry points side by side: photos and video, plain typed notes, and just talking it out loud.",
+          "Writing a script from nothing is the hardest part, so we never ask for one. Dump in photos, video, notes, or just talk it out, and AI turns that into a first script — then you pick a direction from there.",
+          "Talking it out mattered more than we expected: people surfaced far more detail rambling out loud than typing a note, so the brainstorm room became as central to this step as uploading media.",
         ],
       },
       {
-        heading: "What made it hard",
-        navLabel: "Challenges",
-        kind: "challenges",
-        body: ["Three things kept surfacing in testing."],
-        cards: [
-          {
-            title: "Never enough footage",
-            body: "People don't have B-roll on hand, and they can't rewind real life to reshoot a moment that's already passed.",
-          },
-          {
-            title: "AI nobody trusts yet",
-            body: "Creators are wary of content that feels generic or inauthentic — suggestions had to come from their own footage and words, not invented ones.",
-          },
-          {
-            title: "Momentum, not overwhelm",
-            body: "When a creative task feels endless, beginners give up before they finish. Progress needed to feel visible almost immediately.",
-          },
-        ],
-      },
-      {
-        heading: "Narrative A-roll, not B-roll",
+        heading: "A-roll for the problem of not enough footage",
         navLabel: "A-roll",
         body: [
-          "Users film themselves reading or reacting to their own script, so a single narrative clip becomes the backbone of the story — which quietly removes the pressure to have “enough footage.” Existing photos and video fill in the gaps around it, scene by scene, instead of being the thing that has to carry the whole story.",
+          "The question that kept coming up in testing: what if you don't have enough footage? Our answer was A-roll — record yourself reading or reacting to the script, and that single clip becomes the story's backbone.",
+          "We'd assumed every line of narration needed its own matching footage. A-roll broke that assumption — the story could carry itself, and existing photos and video became optional support instead of a requirement.",
         ],
       },
       {
-        heading: "AI scoped to your own media",
-        navLabel: "AI scope",
+        heading: "Editing a sentence for the problem of editing a timeline",
+        navLabel: "Editing",
         body: [
-          "AI is scoped tightly — it operates directly on the user's own media and words, turning an overwhelming task into a handful of manageable steps, like photo-to-video generation and batch script edits, instead of inventing content from nothing.",
+          "This is a storytelling tool before it's an editing tool, so editing had to happen at the level of a sentence, not a frame. Rewrite a line and the video follows — no timeline, no clips to hunt down.",
+          "AI stays scoped to exactly what you gave it — generating video from your own photos, batch-editing your own script — rather than inventing anything from nothing.",
         ],
       },
       {
