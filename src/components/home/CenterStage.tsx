@@ -137,6 +137,28 @@ function DesignLayer({
   );
 }
 
+// Two prototype screenshots fanned out in front of the blurred cover
+// photo behind them, like screenshots laid on a table — one tilted left,
+// one tilted right, overlapping slightly at the center.
+function ProjectPrototypes({ images }: { images: [string, string] }) {
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      {images.map((src, i) => (
+        <div
+          key={src}
+          className={`relative aspect-[9/19.5] w-[32%] max-w-[150px] overflow-hidden rounded-[1.3rem] border-[3px] border-white/95 shadow-[0_20px_45px_-12px_rgba(0,0,0,0.55)] ${
+            i === 0
+              ? "-rotate-6 translate-x-3"
+              : "rotate-6 -translate-x-3"
+          }`}
+        >
+          <Image src={src} alt="" fill sizes="150px" className="object-cover" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ProjectLayer({
   progress,
   index,
@@ -147,6 +169,7 @@ function ProjectLayer({
   project: Project;
 }) {
   const opacity = useLayerOpacity(progress, index + 1);
+  const prototypes = project.homePrototypes;
   return (
     <div
       className="absolute inset-0 flex items-center justify-center p-6 pb-20 lg:p-16"
@@ -162,8 +185,9 @@ function ProjectLayer({
           alt=""
           fill
           sizes="(min-width: 1024px) 700px, 90vw"
-          className="object-cover"
+          className={`object-cover ${prototypes ? "scale-110 blur-md" : ""}`}
         />
+        {prototypes && <ProjectPrototypes images={prototypes} />}
       </Link>
     </div>
   );

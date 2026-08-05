@@ -49,6 +49,11 @@ export type Project = {
   cover: string;
   heroImage?: string;
   media?: ProjectMedia[];
+  // Two prototype screenshots shown layered in front of the (blurred)
+  // cover photo on the home page's scroll-through project reveal. Only
+  // set for projects where that reads well — not every cover photo is a
+  // good blur backdrop, and not every project has spare screenshots.
+  homePrototypes?: [string, string];
   sections: ProjectSection[];
 };
 
@@ -65,6 +70,10 @@ export const projects: Project[] = [
     tools: "Figma, ProtoPie, LottieLab, Gen AI tools",
     tags: ["Prototyping", "GenAI", "System Design"],
     cover: "/media/home/stitch-ai.jpg",
+    homePrototypes: [
+      "/media/stitch-ai/concept-dump.jpg",
+      "/media/stitch-ai/ai-feature.jpg",
+    ],
     media: [
       {
         kind: "context",
@@ -230,6 +239,10 @@ export const projects: Project[] = [
     tools: "Figma, ProtoPie, LottieLab",
     tags: ["Interaction Design", "Motion", "Prototyping"],
     cover: "/media/home/idle-songwriting.jpg",
+    homePrototypes: [
+      "/media/idle-songwriting/clip-1-punchin.jpg",
+      "/media/idle-songwriting/clip-2-rhyme.jpg",
+    ],
     media: [
       {
         kind: "phone",
