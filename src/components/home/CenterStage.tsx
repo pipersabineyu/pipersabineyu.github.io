@@ -137,22 +137,31 @@ function DesignLayer({
   );
 }
 
-// Two prototype screenshots fanned out in front of the blurred cover
-// photo behind them, like screenshots laid on a table — one tilted left,
-// one tilted right, overlapping slightly at the center.
-function ProjectPrototypes({ images }: { images: [string, string] }) {
+// Two prototype clips shown upright and spaced apart in front of the
+// blurred cover photo behind them — no tilt, no overlap, playing the
+// actual prototype footage rather than a static screenshot, so the work
+// itself stays the visible, legible thing on the card.
+function ProjectPrototypes({
+  clips,
+}: {
+  clips: [{ src: string; poster: string }, { src: string; poster: string }];
+}) {
   return (
-    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-      {images.map((src, i) => (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-5 sm:gap-8">
+      {clips.map((clip) => (
         <div
-          key={src}
-          className={`relative aspect-[9/19.5] w-[32%] max-w-[150px] overflow-hidden rounded-[1.3rem] border-[3px] border-white/95 shadow-[0_20px_45px_-12px_rgba(0,0,0,0.55)] ${
-            i === 0
-              ? "-rotate-6 translate-x-3"
-              : "rotate-6 -translate-x-3"
-          }`}
+          key={clip.src}
+          className="relative aspect-[9/19.5] h-[78%] max-h-[320px] overflow-hidden rounded-[1.6rem] border-[3px] border-white shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55)]"
         >
-          <Image src={src} alt="" fill sizes="150px" className="object-cover" />
+          <video
+            className="h-full w-full object-cover"
+            src={clip.src}
+            poster={clip.poster}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
       ))}
     </div>
@@ -187,7 +196,7 @@ function ProjectLayer({
           sizes="(min-width: 1024px) 700px, 90vw"
           className={`object-cover ${prototypes ? "scale-110 blur-md" : ""}`}
         />
-        {prototypes && <ProjectPrototypes images={prototypes} />}
+        {prototypes && <ProjectPrototypes clips={prototypes} />}
       </Link>
     </div>
   );
