@@ -76,7 +76,7 @@ export const projects: Project[] = [
         heading: "Sketching the hypothesis by hand",
         caption:
           "An animatic we sketched to pressure-test the hypothesis before writing a line of code.",
-        after: "The hypothesis",
+        after: "We hypothesize the barrier isn't editing, it's storytelling.",
       },
       {
         kind: "phone",
@@ -173,13 +173,11 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "The hypothesis",
+        heading: "We hypothesize the barrier isn't editing, it's storytelling.",
         navLabel: "Hypothesis",
-        kind: "quote",
-        quote: "The barrier isn't editing. It's storytelling.",
       },
       {
-        heading: "The solution",
+        heading: "Script-first media, not editing tools",
         navLabel: "Solution",
         body: [
           "Edit your video by letting AI edit the script. Dump in everything you have, get a script back, and shape the story by rewriting it instead of wrestling with a timeline.",
