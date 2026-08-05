@@ -2,12 +2,14 @@ export type ProjectSection = {
   heading: string;
   body?: string[];
   // "quote" renders as a centered pull-quote break instead of a normal
-  // section. "challenges" renders `challenges` as a numbered card grid
-  // after any intro body copy — for surfacing several distinct problems
-  // at once instead of one long paragraph.
-  kind?: "quote" | "challenges";
+  // section. "challenges"/"insights" both render `cards` as a numbered
+  // grid after any intro body copy — the same visual device, used for two
+  // different narrative beats: distinct problems ("challenges") vs.
+  // distinct things learned about the landscape before designing anything
+  // ("insights") — surfacing several at once instead of one long paragraph.
+  kind?: "quote" | "challenges" | "insights";
   quote?: string;
-  challenges?: { title: string; body: string }[];
+  cards?: { title: string; body: string }[];
   // Optional before/after chips rendered under the body copy, for making
   // a value proposition ("old mental model" → "new one") concrete.
   stateBefore?: string;
@@ -15,10 +17,17 @@ export type ProjectSection = {
 };
 
 export type ProjectMedia = {
-  kind: "phone" | "image";
+  // "phone" = an actual UI screen recording, phone-framed, on the gray
+  // stage. "context" = something that isn't a UI prototype at all (an
+  // animatic, process footage) — shown wide, on its own dark stage, so it
+  // reads as a different kind of artifact rather than another screenshot.
+  // "image" = a static image grid (used by non-video case studies).
+  kind: "phone" | "context" | "image";
   src: string;
   poster?: string;
   caption?: string;
+  // Attribution for media made primarily by a teammate rather than Piper.
+  credit?: string;
   after: string;
 };
 
@@ -54,25 +63,78 @@ export const projects: Project[] = [
     cover: "/media/home/stitch-ai.jpg",
     media: [
       {
+        kind: "context",
+        src: "/media/stitch-ai/animatic.mp4",
+        poster: "/media/stitch-ai/animatic.jpg",
+        caption:
+          "An animatic Justin and I sketched by hand to pressure-test the hypothesis before writing a line of code.",
+        credit: "With Justin Kim",
+        after: "The hypothesis",
+      },
+      {
         kind: "phone",
-        src: "/media/stitch-ai/clip-1-onboarding.mp4",
-        poster: "/media/stitch-ai/clip-1-onboarding.jpg",
-        caption: "“What story should we tell?” — dump in notes, media, and messy ideas.",
+        src: "/media/stitch-ai/concept-dump.mp4",
+        poster: "/media/stitch-ai/concept-dump.jpg",
+        caption: "A voice note about a trip becomes the raw material for a script.",
         after: "The idea",
       },
       {
         kind: "phone",
-        src: "/media/stitch-ai/clip-2-generate.mp4",
-        poster: "/media/stitch-ai/clip-2-generate.jpg",
-        caption: "Choosing a direction and generating a first script.",
-        after: "The idea",
+        src: "/media/stitch-ai/dump-media-a.mp4",
+        poster: "/media/stitch-ai/dump-media-a.jpg",
+        caption: "Dump in photos and video, in whatever order they actually happened.",
+        after: "Getting everything in",
       },
       {
         kind: "phone",
-        src: "/media/stitch-ai/clip-3-edit.mp4",
-        poster: "/media/stitch-ai/clip-3-edit.jpg",
+        src: "/media/stitch-ai/dump-media-b.mp4",
+        poster: "/media/stitch-ai/dump-media-b.jpg",
+        caption: "Or just type. Nothing has to be photographed to count.",
+        after: "Getting everything in",
+      },
+      {
+        kind: "phone",
+        src: "/media/stitch-ai/brainstorm-a.mp4",
+        poster: "/media/stitch-ai/brainstorm-a.jpg",
+        caption: "Or talk it out — the brainstorm room turns rambling into a structured note.",
+        after: "Getting everything in",
+      },
+      {
+        kind: "phone",
+        src: "/media/stitch-ai/brainstorm-b.mp4",
+        poster: "/media/stitch-ai/brainstorm-b.jpg",
+        caption: "Recording the narration that becomes the story's backbone.",
+        after: "Narrative A-roll, not B-roll",
+      },
+      {
+        kind: "phone",
+        src: "/media/stitch-ai/edge-case.mp4",
+        poster: "/media/stitch-ai/edge-case.jpg",
+        caption:
+          "A prototype exploring the exact edge case above: not enough footage, filled in scene by scene.",
+        credit: "Prototyped with Justin Kim",
+        after: "Narrative A-roll, not B-roll",
+      },
+      {
+        kind: "phone",
+        src: "/media/stitch-ai/edit-script.mp4",
+        poster: "/media/stitch-ai/edit-script.jpg",
         caption: "Editing the story by editing the script, not a timeline.",
-        after: "Design decisions",
+        after: "AI scoped to your own media",
+      },
+      {
+        kind: "phone",
+        src: "/media/stitch-ai/ai-feature.mp4",
+        poster: "/media/stitch-ai/ai-feature.jpg",
+        caption: "The script it wrote, next to the exact photos it wrote from.",
+        after: "AI scoped to your own media",
+      },
+      {
+        kind: "phone",
+        src: "/media/stitch-ai/hero-loop.mp4",
+        poster: "/media/stitch-ai/hero-loop.jpg",
+        caption: "The finished story — scenes you can still scrub through and rearrange.",
+        after: "What I took away",
       },
     ],
     sections: [
@@ -88,6 +150,32 @@ export const projects: Project[] = [
         quote: "The problem isn't editing. The problem is they don't have a story.",
       },
       {
+        heading: "What already existed",
+        kind: "insights",
+        body: [
+          "Before designing anything, we looked at how the existing landscape was already trying to solve this — and where each attempt stopped short.",
+        ],
+        cards: [
+          {
+            title: "Apps simplified the timeline, not the story",
+            body: "TikTok, Instagram, and their peers made editing more approachable by stripping the interface down. That solved friction, not the blank page.",
+          },
+          {
+            title: "AI editors automated cuts, not storytelling",
+            body: "Newer AI tools got good at trimming and syncing footage automatically — but what to say, and in what order, was still entirely on the user.",
+          },
+          {
+            title: "The best videos were never about editing skill",
+            body: "Looking at creators people actually love watching, the throughline wasn't production value. It was that they had something to say.",
+          },
+        ],
+      },
+      {
+        heading: "The hypothesis",
+        kind: "quote",
+        quote: "The real barrier isn't learning to edit. It's finding a story worth telling.",
+      },
+      {
         heading: "The idea",
         body: [
           "Stitch lets you dump everything you have — notes, moments, media, and messy thoughts — and turns it into a script. Instead of staring at a blank page, you get a story pulled straight from your own chaos.",
@@ -97,10 +185,16 @@ export const projects: Project[] = [
         stateAfter: "A script anyone can read, rewrite, and understand.",
       },
       {
+        heading: "Getting everything in",
+        body: [
+          "“Dump everything” had to actually mean everything — whichever way an idea first shows up is the way it should be allowed in. We prototyped several entry points side by side: photos and video, plain typed notes, and just talking it out loud.",
+        ],
+      },
+      {
         heading: "What made it hard",
         kind: "challenges",
         body: ["Three things kept surfacing in testing."],
-        challenges: [
+        cards: [
           {
             title: "Never enough footage",
             body: "People don't have B-roll on hand, and they can't rewind real life to reshoot a moment that's already passed.",
@@ -116,11 +210,15 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "Design decisions",
+        heading: "Narrative A-roll, not B-roll",
         body: [
-          "Narrative A-roll, not B-roll: users film themselves reading or reacting to their own script, so a single narrative clip becomes the backbone of the story — which quietly removes the pressure to have “enough footage.”",
-          "A brainstorm room gives structure without taking away control: it suggests a direction while leaving the user free to override it.",
-          "AI is scoped tightly — it operates directly on the user's own media and words, turning an overwhelming task into a handful of manageable steps, like photo-to-video generation and batch script edits.",
+          "Users film themselves reading or reacting to their own script, so a single narrative clip becomes the backbone of the story — which quietly removes the pressure to have “enough footage.” Existing photos and video fill in the gaps around it, scene by scene, instead of being the thing that has to carry the whole story.",
+        ],
+      },
+      {
+        heading: "AI scoped to your own media",
+        body: [
+          "AI is scoped tightly — it operates directly on the user's own media and words, turning an overwhelming task into a handful of manageable steps, like photo-to-video generation and batch script edits, instead of inventing content from nothing.",
         ],
       },
       {

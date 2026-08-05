@@ -23,33 +23,79 @@ function MetaItem({ label, value }: { label: string; value?: string }) {
 // Phone/prototype media sits on its own soft gray "stage" — same off-white
 // surface tone as the about page's stamp board — so screen recordings read
 // as artifacts being presented, not raw screenshots floating on the page.
-function MediaGroup({ items }: { items: ProjectMedia[] }) {
-  const allPhones = items.every((m) => m.kind === "phone");
-
-  if (allPhones) {
-    return (
-      <FadeIn>
-        <div className="my-8 rounded-3xl border border-border bg-surface px-6 py-10 sm:px-10 sm:py-14">
-          <div
-            className={`mx-auto grid grid-cols-1 gap-8 ${
-              items.length > 1 ? "max-w-xl sm:grid-cols-2" : "max-w-[260px]"
-            }`}
-          >
-            {items.map((m) => (
-              <figure key={m.src} className="flex flex-col items-center gap-3">
-                <PhoneFrame src={m.src} poster={m.poster} />
-                {m.caption && (
-                  <figcaption className="max-w-[220px] text-center text-[12px] leading-relaxed text-subtle">
-                    {m.caption}
-                  </figcaption>
-                )}
-              </figure>
-            ))}
-          </div>
+function PhoneStage({ items }: { items: ProjectMedia[] }) {
+  return (
+    <FadeIn>
+      <div className="my-8 rounded-3xl border border-border bg-surface px-6 py-10 sm:px-10 sm:py-14">
+        <div
+          className={`mx-auto grid grid-cols-1 gap-8 ${
+            items.length > 1 ? "max-w-xl sm:grid-cols-2" : "max-w-[260px]"
+          }`}
+        >
+          {items.map((m) => (
+            <figure key={m.src} className="flex flex-col items-center gap-3">
+              <PhoneFrame src={m.src} poster={m.poster} />
+              {(m.caption || m.credit) && (
+                <figcaption className="max-w-[220px] text-center text-[12px] leading-relaxed text-subtle">
+                  {m.caption}
+                  {m.credit && (
+                    <span className="mt-1 block text-[10px] uppercase tracking-[0.1em] text-subtle/70">
+                      {m.credit}
+                    </span>
+                  )}
+                </figcaption>
+              )}
+            </figure>
+          ))}
         </div>
-      </FadeIn>
-    );
-  }
+      </div>
+    </FadeIn>
+  );
+}
+
+// Reserved for content that isn't a UI screen recording at all — an
+// animatic, process footage — so it reads as a different kind of artifact
+// rather than another phone screenshot. Wide, on its own near-black stage,
+// deliberately unlike the light gray phone stage above.
+function ContextStage({ item }: { item: ProjectMedia }) {
+  return (
+    <FadeIn>
+      <div className="my-8 overflow-hidden rounded-3xl border border-border bg-[#161513]">
+        <p className="px-6 pt-6 font-grotesk text-[10px] uppercase tracking-[0.16em] text-white/40 sm:px-10">
+          Context, not a prototype
+        </p>
+        <div className="mx-auto mt-4 max-w-xl px-6 sm:px-10">
+          <video
+            className="w-full rounded-xl"
+            src={item.src}
+            poster={item.poster}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        </div>
+        {(item.caption || item.credit) && (
+          <figcaption className="px-6 pb-8 pt-4 text-[12px] leading-relaxed text-white/60 sm:px-10">
+            {item.caption}
+            {item.credit && (
+              <span className="mt-1 block text-[10px] uppercase tracking-[0.1em] text-white/40">
+                {item.credit}
+              </span>
+            )}
+          </figcaption>
+        )}
+      </div>
+    </FadeIn>
+  );
+}
+
+function MediaGroup({ items }: { items: ProjectMedia[] }) {
+  const context = items.find((m) => m.kind === "context");
+  if (context) return <ContextStage item={context} />;
+
+  const phones = items.filter((m) => m.kind === "phone");
+  if (phones.length > 0) return <PhoneStage items={phones} />;
 
   return (
     <FadeIn>
@@ -91,9 +137,11 @@ function PullQuote({ quote }: { quote: string }) {
   );
 }
 
-// Surfaces several distinct problems side by side, numbered, instead of
+// Surfaces several distinct points side by side, numbered, instead of
 // flattening them into one paragraph — makes the complexity legible.
-function ChallengeGrid({
+// Shared by "challenges" (distinct problems) and "insights" (distinct
+// things learned about the landscape before designing anything).
+function NumberedGrid({
   items,
 }: {
   items: { title: string; body: string }[];
@@ -216,41 +264,44 @@ export function CaseStudy({ project }: { project: Project }) {
           {project.sections.map((section, i) => {
             const matchingMedia =
               project.media?.filter((m) => m.after === section.heading) ?? [];
-
-            if (section.kind === "quote" && section.quote) {
-              return <PullQuote key={i} quote={section.quote} />;
-            }
+            const isQuote = section.kind === "quote" && section.quote;
 
             return (
               <div key={i}>
-                <FadeIn delay={0.04 * i}>
-                  <div className="py-6">
-                    <h2 className="font-grotesk text-[14px] font-medium text-foreground">
-                      {section.heading}
-                    </h2>
-                    {section.body && (
-                      <div className="mt-2 flex flex-col gap-3">
-                        {section.body.map((paragraph, j) => (
-                          <p
-                            key={j}
-                            className="text-[14px] leading-relaxed text-muted"
-                          >
-                            {paragraph}
-                          </p>
-                        ))}
-                      </div>
-                    )}
-                    {section.kind === "challenges" && section.challenges && (
-                      <ChallengeGrid items={section.challenges} />
-                    )}
-                    {section.stateBefore && section.stateAfter && (
-                      <StateShift
-                        before={section.stateBefore}
-                        after={section.stateAfter}
-                      />
-                    )}
-                  </div>
-                </FadeIn>
+                {isQuote ? (
+                  <PullQuote quote={section.quote!} />
+                ) : (
+                  <FadeIn delay={0.04 * i}>
+                    <div className="py-6">
+                      <h2 className="font-grotesk text-[14px] font-medium text-foreground">
+                        {section.heading}
+                      </h2>
+                      {section.body && (
+                        <div className="mt-2 flex flex-col gap-3">
+                          {section.body.map((paragraph, j) => (
+                            <p
+                              key={j}
+                              className="text-[14px] leading-relaxed text-muted"
+                            >
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                      {(section.kind === "challenges" ||
+                        section.kind === "insights") &&
+                        section.cards && (
+                          <NumberedGrid items={section.cards} />
+                        )}
+                      {section.stateBefore && section.stateAfter && (
+                        <StateShift
+                          before={section.stateBefore}
+                          after={section.stateAfter}
+                        />
+                      )}
+                    </div>
+                  </FadeIn>
+                )}
                 {matchingMedia.length > 0 && (
                   <MediaGroup items={matchingMedia} />
                 )}
