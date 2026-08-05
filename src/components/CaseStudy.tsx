@@ -122,14 +122,14 @@ function MediaGroup({ items }: { items: ProjectMedia[] }) {
   );
 }
 
-// A centered pull-quote break — used to give a single, load-bearing line
+// A left-aligned pull-quote break — used to give a single, load-bearing line
 // (the core insight or hypothesis) its own visual beat between sections.
 function PullQuote({ quote }: { quote: string }) {
   return (
     <FadeIn>
-      <div className="my-4 border-y border-border py-10 text-center">
-        <p className="mx-auto max-w-lg font-playfair text-[clamp(1.3rem,3.6vw,1.9rem)] leading-snug text-foreground">
-          &ldquo;{quote}&rdquo;
+      <div className="my-10">
+        <p className="max-w-lg font-playfair text-[clamp(1.3rem,3.6vw,1.9rem)] leading-snug text-foreground">
+          {quote}
         </p>
       </div>
     </FadeIn>
