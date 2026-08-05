@@ -151,11 +151,6 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "",
-        kind: "quote",
-        quote: "The problem isn't editing. The problem is they don't have a story.",
-      },
-      {
         heading: "What similar apps already tried",
         navLabel: "Competitors",
         kind: "insights",

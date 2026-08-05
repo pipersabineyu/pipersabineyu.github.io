@@ -274,6 +274,9 @@ export function CaseStudy({ project }: { project: Project }) {
                 ) : (
                   <FadeIn delay={0.04 * i}>
                     <div className="py-6">
+                      {section.navLabel && (
+                        <p className={`mb-2 ${EYEBROW}`}>{section.navLabel}</p>
+                      )}
                       <h2 className="font-grotesk text-[19px] font-semibold leading-snug text-foreground sm:text-[21px]">
                         {section.heading}
                       </h2>
