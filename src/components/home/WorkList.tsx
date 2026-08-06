@@ -1,47 +1,27 @@
-import Image from "next/image";
-import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
-import { projects } from "@/lib/projects";
+import { PhoneFrame } from "@/components/PhoneFrame";
+import { experiments } from "@/lib/experiments";
 
+// Quick standalone UI explorations — iPhone-frame prototypes that don't
+// warrant a full case study, unlike the projects covered in the hero
+// scroll-through above. Distinct from that section on purpose: this one
+// is for the work-in-progress/sketch-quality stuff.
 export function WorkList() {
   return (
     <div id="work" className="mx-auto w-full max-w-2xl scroll-mt-20 px-6 py-24">
       <FadeIn>
         <h2 className="font-grotesk text-[13px] text-foreground">
-          All work
+          Experiments
         </h2>
-        <div className="mt-1 flex flex-col divide-y divide-border">
-          {projects.map((project) => (
-            <Link
-              key={project.slug}
-              href={`/work/${project.slug}`}
-              className="group flex items-center gap-4 py-4"
-            >
-              <div className="relative h-14 w-16 shrink-0 overflow-hidden rounded-md">
-                <Image
-                  src={project.cover}
-                  alt=""
-                  fill
-                  sizes="64px"
-                  className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.05]"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="text-[14px] text-foreground transition-colors group-hover:text-muted">
-                    {project.title}
-                  </h3>
-                  <span className="shrink-0 text-[12px] text-subtle">
-                    {project.company}
-                  </span>
-                </div>
-                <p className="mt-0.5 truncate text-[13px] text-muted">
-                  {project.blurb}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {experiments.length > 0 ? (
+          <div className="mt-6 grid grid-cols-2 gap-8 sm:grid-cols-4">
+            {experiments.map((exp) => (
+              <PhoneFrame key={exp.title} src={exp.src} poster={exp.poster} />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-4 text-[13px] text-subtle">Coming soon.</p>
+        )}
       </FadeIn>
     </div>
   );
