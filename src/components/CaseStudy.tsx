@@ -189,7 +189,7 @@ export function CaseStudy({ project }: { project: Project }) {
 
   return (
     <div className="flex flex-col">
-      <CaseStudyNav items={navItems} />
+      <CaseStudyNav items={navItems} backHref="/#work" />
       <div className="relative h-44 w-full overflow-hidden sm:h-56">
         <Image
           src={hero}
