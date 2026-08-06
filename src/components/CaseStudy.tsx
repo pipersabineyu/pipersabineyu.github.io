@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BackButton } from "@/components/BackButton";
 import { CaseStudyNav } from "@/components/CaseStudyNav";
 import { FadeIn } from "@/components/FadeIn";
 import { PhoneFrame } from "@/components/PhoneFrame";
@@ -205,9 +204,6 @@ export function CaseStudy({ project }: { project: Project }) {
       </div>
 
       <div className="mx-auto w-full max-w-2xl px-6 pb-24 pt-8">
-        <FadeIn>
-          <BackButton href="/#work" label="Back to work" />
-        </FadeIn>
         <FadeIn delay={0.06}>
           <p className={`mt-6 ${EYEBROW}`}>{project.company}</p>
         </FadeIn>
