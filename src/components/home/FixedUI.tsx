@@ -118,7 +118,7 @@ export function FixedUI({
         }}
       >
         <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">
-          Selected work{" "}
+          {current.company}{" "}
           <span className="text-subtle/70">
             · {String(index + 1).padStart(2, "0")}/
             {String(projects.length).padStart(2, "0")}
