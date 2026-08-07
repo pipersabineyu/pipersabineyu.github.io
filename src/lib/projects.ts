@@ -255,15 +255,15 @@ export const projects: Project[] = [
         kind: "phone",
         src: "/media/idle-songwriting/clip-1-punchin.mp4",
         poster: "/media/idle-songwriting/clip-1-punchin.jpg",
-        caption: "Punch-in recording: lay down short takes over the same beat.",
-        after: "Recording over the loop, take by take",
+        caption: "Screen 01: hold to loop a section, then record over it.",
+        after: "User records lyrics over the loop",
       },
       {
         kind: "phone",
         src: "/media/idle-songwriting/clip-2-rhyme.mp4",
         poster: "/media/idle-songwriting/clip-2-rhyme.jpg",
-        caption: "Rhyme suggestions step in only when you're stuck.",
-        after: "Rhyme suggestions, only when you're stuck",
+        caption: "Screen 02: the loop becomes temporary generated lyrics.",
+        after: "User generates lyrics based on the loop",
       },
     ],
     sections: [
@@ -286,7 +286,7 @@ export const projects: Project[] = [
         navLabel: "Research",
         kind: "insights",
         body: [
-          "We interviewed and tested with over 15 working artists, musicians, and songwriters before designing anything.",
+          "We interviewed and tested with over 15 working artists, musicians, and songwriters before designing anything. “It's more about finding a rhythm than the lyrics themselves,” one songwriter told us, a line that stuck with us through the rest of the project.",
         ],
         cards: [
           {
@@ -304,11 +304,6 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "“It's more about finding a rhythm than the lyrics themselves.” — Jace, singer/songwriter",
-        kind: "quote",
-        quote: "“It's more about finding a rhythm than the lyrics themselves.” — Jace, singer/songwriter",
-      },
-      {
         heading: "Generate temporary lyrics, keep a permanent flow.",
         navLabel: "Hypothesis",
       },
@@ -316,38 +311,40 @@ export const projects: Project[] = [
         heading: "AI that supports creation, not substitutes for it",
         navLabel: "Solution",
         body: [
-          "The app fills idle moments with malleable lyric ideas artists can punch in, test, and refine later: temporary lyrics generated over a loop, while the artist's own flow stays permanent.",
+          "The app fills idle moments with malleable lyric ideas artists can punch in, test, and refine later: temporary lyrics generated over a loop, while the artist's own flow stays permanent. Here's the key flow.",
         ],
         stateBefore: "A blank page, or an AI that writes the whole song for you.",
         stateAfter: "Temporary lyrics you punch in, test, and refine yourself.",
       },
       {
-        heading: "Recording over the loop, take by take",
-        navLabel: "Punch-in recording",
+        heading: "User records lyrics over the loop",
+        navLabel: "Screen 01",
         body: [
-          "A punch-in recording system lets people lay down multiple short takes over the same beat, so they can review rhythm, pacing, and word placement side by side without overplanning any single take.",
+          "The user holds to loop a section of the song, so that part now repeats over and over.",
+          "They can sing, freestyle, or even mumble over the looped section, capturing an idea in the moment instead of stopping to write it down first.",
         ],
       },
       {
-        heading: "Rhyme suggestions, only when you're stuck",
-        navLabel: "Rhyme suggestions",
+        heading: "User generates lyrics based on the loop",
+        navLabel: "Screen 02",
         body: [
-          "Lightweight rhyme suggestions step in only when someone's stuck, easing the bottleneck of lyric-writing without ever writing the line for them, generating something temporary to punch in, never a permanent line.",
+          "Once a take is recorded, the app turns the loop into temporary generated lyric suggestions, letting the artist stay in the flow of making music instead of stopping to write.",
+          "They can view rhyming options and alternate lines from the AI, then tweak or record again using those as a starting point.",
         ],
       },
       {
-        heading: "A usable first draft, not a final one",
-        navLabel: "Iteration",
+        heading: "User adjusts generative lyrics",
+        navLabel: "Screen 03",
         body: [
-          "The whole system is tuned for rapid iteration over perfection, so people can tell which takes “felt right” without re-listening to everything from scratch, revisit past versions, compare changes, and move forward without second-guessing.",
+          "From there, the artist keeps shaping the take: swapping in a different rhyme, rerecording a line, or building on a suggestion until it feels like theirs, not the AI's.",
         ],
       },
       {
         heading: "What I took away",
         navLabel: "Reflection",
         body: [
-          "“Designing in theory never works.”",
-          "By limiting where and how AI intervened, the product actually felt more creative, not less. And because nothing in the system felt permanent, people were more willing to experiment. Reversibility did more for creative confidence than any feature did.",
+          "The whole system is tuned for rapid iteration over perfection, so people could tell which takes “felt right” without re-listening to everything from scratch, and revisit past versions without second-guessing.",
+          "“Designing in theory never works.” By limiting where and how AI intervened, the product actually felt more creative, not less. And because nothing in the system felt permanent, people were more willing to experiment. Reversibility did more for creative confidence than any feature did.",
         ],
       },
     ],
