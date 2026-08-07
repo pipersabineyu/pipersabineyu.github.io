@@ -41,12 +41,13 @@ const BOX_ASPECT =
 type Frame = { left: number; top: number; width: number; height: number; radius: number; k: number };
 type Fit = { scale: number; x: number; y: number; clip: string; frame: Frame | null };
 
-// Matches PhoneFrame.tsx's own bezel proportions (padding 10 / outer radius
-// 41.6 at its BASE_WIDTH of 260) so a synthetic bezel drawn here looks like
-// the same device as the ones case studies use, just scaled to whatever
-// size the found screen ends up rendering at.
+// Matches PhoneFrame.tsx's own bezel proportions (padding 10, outer radius
+// 41.6, inner screen radius 32, at its BASE_WIDTH of 260) so a synthetic
+// bezel drawn here looks like the same device as the ones case studies use,
+// just scaled to whatever size the found screen ends up rendering at.
 const BEZEL_PAD_RATIO = 10 / 260;
 const BEZEL_RADIUS_RATIO = 41.6 / 260;
+const SCREEN_RADIUS_RATIO = 32 / 260;
 
 // Stage-pixel slack kept around the bezel when clipping — just enough to
 // avoid clipping the bezel's own rounded corner. Any more than this let the
@@ -179,13 +180,20 @@ export function PrototypeFrame({
     // the bezel itself (in the iframe's own untransformed coordinates, so
     // the transform below scales the clip along with everything else)
     // keeps only the device visible regardless of that leftover slack.
+    //
+    // When drawing our own bezel, the source screen is a flat rectangle —
+    // rounding the clip itself (in the same untransformed units, so it
+    // scales along with everything else) is what gives it corners matching
+    // the synthetic bezel's inner cutout, instead of a rounded frame around
+    // a screen with square corners poking past it.
+    const screenRadius = drawBezel ? (bezel.width * SCREEN_RADIUS_RATIO) : 0;
     const clip = `inset(${Math.max(0, bezel.top - CLIP_MARGIN)}px ${Math.max(
       0,
       STAGE_W - bezel.right - CLIP_MARGIN
     )}px ${Math.max(0, STAGE_H - bezel.bottom - CLIP_MARGIN)}px ${Math.max(
       0,
       bezel.left - CLIP_MARGIN
-    )}px)`;
+    )}px${screenRadius ? ` round ${screenRadius}px` : ""})`;
 
     let frame: Frame | null = null;
     if (drawBezel) {
