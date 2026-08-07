@@ -265,6 +265,13 @@ export const projects: Project[] = [
         caption: "Screen 02: the loop becomes temporary generated lyrics.",
         after: "User generates lyrics based on the loop",
       },
+      {
+        kind: "phone",
+        src: "/media/idle-songwriting/clip-2-rhyme.mp4",
+        poster: "/media/idle-songwriting/clip-2-rhyme.jpg",
+        caption: "Screen 03: the Playground lets you explore rhyme schematics and adjust the take.",
+        after: "User adjusts generative lyrics",
+      },
     ],
     sections: [
       {
