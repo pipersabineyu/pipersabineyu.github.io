@@ -15,15 +15,11 @@ export default function ExperimentsPage() {
         <p className="mt-6 font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
           Prototypes & Experiments
         </p>
-        <h1 className="mt-3 max-w-2xl font-grotesk text-[clamp(1.8rem,4.5vw,2.5rem)] font-semibold leading-tight text-foreground">
-          Quick standalone UI prototypes that don&rsquo;t warrant a full case
-          study.
-        </h1>
       </FadeIn>
 
       {experiments.length > 0 ? (
         <FadeIn delay={0.1}>
-          <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
             {experiments.map((exp) => (
               <PrototypeFrame key={exp.title} src={exp.src} title={exp.title} />
             ))}
