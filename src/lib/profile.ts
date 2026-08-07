@@ -12,7 +12,7 @@ export const profile = {
   education: [
     {
       org: "UC Berkeley",
-      detail: "HCI Design, Data Science, Economics",
+      detail: "College of Computing, Data Science and Society",
     },
     {
       org: "Silicon Valley School of Design",
