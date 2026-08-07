@@ -42,17 +42,21 @@ function useLayerOpacity(progress: MotionValue<number>, i: number) {
   return opacity;
 }
 
-// Below this the text sits below the cube (stacked); at or above, text sits
-// to the left and the cube is centered in the full viewport (side-by-side).
-// Matches Tailwind's `lg:` breakpoint — keep FixedUI's blockPosition and
-// this file's own pb-28/pb-20 switches on the same one.
-const SIDE_BY_SIDE_MIN_WIDTH = 1024;
-// FixedUI's left-8 (32px) + its max-w-[280px] text column, side-by-side.
+// Below this the text sits below the media (phone, stacked); at or above,
+// text sits to the left and media is centered in the remaining width
+// (tablet / laptop, side-by-side). Matches Tailwind's `md:` — keep
+// FixedUI's blockPosition and this file's md:pl / pb switches in sync.
+const SIDE_BY_SIDE_MIN_WIDTH = 768;
+// FixedUI's left-8 (32px) + its max-w-[280px] text column.
 const TEXT_RIGHT_EDGE = 312;
 // Stacked layout: FixedUI's bottom offset (80px + a safe-area allowance) +
 // the two-line intro/work text block.
 const TEXT_BLOCK_HEIGHT = 140;
 const SAFETY_MARGIN = 28;
+// Left padding on md+ so covers/prototypes/cube clear the fixed text column
+// instead of centering under it. Keep the Tailwind `md:pl-[340px]` below
+// equal to this value.
+const TEXT_RESERVE = TEXT_RIGHT_EDGE + SAFETY_MARGIN;
 
 // The cube is draggable up to rx=±78°, and ry freely — at extreme angles
 // its projected (2D screen) bounding box is much bigger than its flat edge
@@ -73,16 +77,22 @@ function useCubeSize() {
     const update = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const preferred = Math.min(420, vw * 0.68);
 
       const safeCap =
         vw < SIDE_BY_SIDE_MIN_WIDTH
           ? // Stacked: cube center is shifted up by half of pb-28 (56px);
             // its worst-case bottom edge must still clear the text below it.
             (vh / 2 - 56 - TEXT_BLOCK_HEIGHT - SAFETY_MARGIN) / WORST_Y_RATIO
-          : // Side-by-side: cube is centered in the full viewport; its
-            // worst-case left edge must still clear the text on the left.
-            (vw / 2 - TEXT_RIGHT_EDGE - SAFETY_MARGIN) / WORST_X_RATIO;
+          : // Side-by-side: cube is centered in the media column to the
+            // right of TEXT_RESERVE; fit worst-case extent in that box.
+            Math.min(
+              (vw - TEXT_RESERVE) / 2 / WORST_X_RATIO,
+              vh / 2 / WORST_Y_RATIO
+            );
+
+      const mediaW =
+        vw < SIDE_BY_SIDE_MIN_WIDTH ? vw : vw - TEXT_RESERVE;
+      const preferred = Math.min(420, mediaW * 0.68);
 
       setSize(Math.max(120, Math.min(preferred, safeCap)));
     };
@@ -125,7 +135,7 @@ function DesignLayer({
 
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center pb-28 lg:pb-0"
+      className="absolute inset-0 flex items-center justify-center pb-28 md:pb-0 md:pl-[340px]"
       style={{ opacity, pointerEvents: opacity > 0.02 ? "auto" : "none" }}
     >
       <PhotoCube
@@ -182,7 +192,7 @@ function ProjectLayer({
   const prototypes = project.homePrototypes;
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center p-6 pb-20 lg:p-16"
+      className="absolute inset-0 flex items-center justify-center p-6 pb-28 md:py-10 md:pr-10 md:pb-10 md:pl-[340px]"
       style={{ opacity, pointerEvents: opacity > 0.02 ? "auto" : "none" }}
     >
       <Link
@@ -194,9 +204,21 @@ function ProjectLayer({
           src={project.cover}
           alt=""
           fill
-          sizes="(min-width: 1024px) 768px, 90vw"
+          sizes="(min-width: 768px) 60vw, 90vw"
           className={`object-cover ${prototypes ? "scale-110 blur-md" : ""}`}
         />
+        {project.coverHtml && (
+          // Animated cover: the self-contained HTML page iframed to fill the
+          // card, sitting on top of `cover` (its poster/fallback). tabIndex
+          // and pointer-events-none keep clicks passing through to the link.
+          <iframe
+            title={project.title}
+            src={project.coverHtml}
+            tabIndex={-1}
+            loading="lazy"
+            className="pointer-events-none absolute inset-0 h-full w-full border-0"
+          />
+        )}
         {prototypes && <ProjectPrototypes clips={prototypes} />}
       </Link>
     </div>

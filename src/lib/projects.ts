@@ -47,6 +47,10 @@ export type Project = {
   tags: string[];
   nda?: boolean;
   cover: string;
+  // A self-contained HTML page iframed over `cover` on the home page's
+  // scroll-through, for projects whose cover is animated rather than a
+  // still. `cover` stays the poster/fallback underneath it.
+  coverHtml?: string;
   heroImage?: string;
   media?: ProjectMedia[];
   // Two prototype video clips shown upright and spaced apart in front of

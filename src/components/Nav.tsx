@@ -32,6 +32,16 @@ export function Nav() {
         <div className="flex items-center gap-4 text-[13px] font-medium tracking-wide sm:gap-5">
           <LiveClock />
           <Link
+            href="/experiments"
+            className={
+              pathname === "/experiments"
+                ? "text-subtle"
+                : "text-foreground transition-colors hover:text-subtle"
+            }
+          >
+            Experiments
+          </Link>
+          <Link
             href="/about"
             className={
               pathname === "/about"

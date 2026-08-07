@@ -27,13 +27,13 @@ function exitFadeAt(p: number) {
   return 1 - Math.min(1, p / 0.3);
 }
 
-// bottom-20 (not bottom-12) plus env(safe-area-inset-bottom) — on tablets the
-// old 48px sat close enough to the true edge that browser chrome/the safe
-// area could eat into it, requiring a scroll to see the rest of the text
-// even though nothing was actually overlapping the cube above it.
+// Phone (< md): stacked under the media. Tablet/laptop (md+): left column.
+// Keep in sync with CenterStage's SIDE_BY_SIDE_MIN_WIDTH / md:pl reserve.
+// bottom-20 + safe-area — on phones the old 48px sat close enough to the
+// edge that browser chrome could eat into it.
 const blockPosition =
   "absolute inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] px-6 text-center " +
-  "lg:inset-x-auto lg:bottom-auto lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:px-0 lg:text-left";
+  "md:inset-x-auto md:bottom-auto md:left-8 md:top-1/2 md:-translate-y-1/2 md:px-0 md:text-left";
 
 function ReplayButton() {
   return (
@@ -102,10 +102,10 @@ export function FixedUI({
         <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">
           Who I am <span className="text-subtle/70">· 00/{String(projects.length).padStart(2, "0")}</span>
         </p>
-        <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground lg:mx-0">
+        <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground md:mx-0">
           Designer who tinkers, creates, and ships production-ready code.
         </p>
-        <div className="hidden lg:flex lg:justify-start">
+        <div className="hidden md:flex md:justify-start">
           <ReplayButton />
         </div>
       </div>
@@ -126,7 +126,7 @@ export function FixedUI({
         </p>
         <Link
           href={`/work/${current.slug}`}
-          className="mx-auto mt-3 block max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground lg:mx-0"
+          className="mx-auto mt-3 block max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground md:mx-0"
         >
           {current.title}
         </Link>
