@@ -482,6 +482,209 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    slug: "self-serve-email-imports",
+    title: "Bring your list with you",
+    company: "Patreon",
+    blurb:
+      "Email import was a manual, ops-run service offered to a handful of creators. I designed the self-serve version, so it could become a lever for driving free behavior at scale.",
+    timeframe: "Summer 2026",
+    role: "Product Designer",
+    tags: ["Product Design", "Growth"],
+    cover: "/media/home/self-serve-email-imports.jpg",
+    heroImage: "/media/self-serve-email-imports/01-arm-overview.jpg",
+    media: [
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/03a-import-modal.jpg",
+        caption: "Import layered over the list the creator is already looking at.",
+        after: "Its own tab, or a modal on top of the ARM?",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/03b-import-tab.jpg",
+        caption: "Import as a destination, with room for history and repeat runs.",
+        after: "Its own tab, or a modal on top of the ARM?",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/04a-upload-with-preview.jpg",
+        caption: "Proof the file was read correctly, and the only chance to catch a wrong export.",
+        after: "Do we show them their emails before importing?",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/04b-upload-no-preview.jpg",
+        caption: "Lighter. The count does the reassuring instead of the rows.",
+        after: "Do we show them their emails before importing?",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/05a-modal-step-1.jpg",
+        caption: "Step 1: is this the right file?",
+        after: "Why the modal is two steps",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/05b-modal-step-2.jpg",
+        caption: "Step 2: am I ready for these people to be members?",
+        after: "Why the modal is two steps",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/05c-modal-step-confirm.jpg",
+        caption: "Confirm, and the import commits.",
+        after: "Why the modal is two steps",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/06-import-in-progress.jpg",
+        caption: "The in-progress state after the creator commits.",
+        after: "Import can take up to an hour",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/07a-summary-results.jpg",
+        caption: "Imported and skipped, sized the same.",
+        after: "We can't tell creators why emails were skipped",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/07b-summary-split-destinations.jpg",
+        caption: "Each result points to the page those members actually went to.",
+        after: "One import, two destinations",
+      },
+      {
+        kind: "image",
+        src: "/media/self-serve-email-imports/08-arm-import-filter.jpg",
+        caption: "An import filter added to the ARM.",
+        after: "And then the list disappears into the audience",
+      },
+      {
+        kind: "context",
+        src: "/media/self-serve-email-imports/walkthrough.mp4",
+        after: "End to end",
+      },
+    ],
+    sections: [
+      {
+        heading: "Email import has a huge opportunity to drive more free behavior",
+        navLabel: "Opportunity",
+        kind: "insights",
+        body: [
+          "Email import is a way for creators to bring in an email list they've already built. Today it exists as a manual, ops-run service, used for part of conquest migrations. It could be a lever to drive more free behaviors from new and existing creators.",
+        ],
+        cards: [
+          {
+            title: "New creators don't start from zero",
+            body: "People who start with an imported list already start to think about what they can do for these free members from day zero.",
+          },
+          {
+            title: "Existing creators bring their free behavior over",
+            body: "Existing creators already exhibit free behaviors on other platforms. We want them to bring that behavior to Patreon.",
+          },
+        ],
+      },
+      {
+        heading: "A manual process can only reach so many creators",
+        navLabel: "Problem",
+        body: [
+          "There are only so many imports ops can run. That caps reach, and when you have to triage, you prioritize larger creators. The creators who most need to not start from zero are the least likely to get an import.",
+        ],
+      },
+      {
+        heading: "What does a self-serve email import experience look like?",
+        navLabel: "Hypothesis",
+      },
+      {
+        heading: "Two parts: importing, and conveying the results",
+        navLabel: "Solution",
+        kind: "insights",
+        body: ["I broke the self-serve experience into two parts."],
+        cards: [
+          {
+            title: "01 — Importing",
+            body: "Where the flow lives, how a creator uploads, and what they confirm before committing.",
+          },
+          {
+            title: "02 — Conveying results",
+            body: "How the summary gets back to the creator: what came in, what didn't, and where it all went.",
+          },
+        ],
+      },
+      {
+        heading: "Its own tab, or a modal on top of the ARM?",
+        navLabel: "Its own tab",
+        body: [
+          "A modal keeps import attached to its consequence: you import, it closes, and the list you were already looking at is different. A tab makes it a destination with room to grow.",
+          "The likely use case is a creator doing multiple imports over time, and that scales with more complex features: import history, repeat runs, source connections. A tab holds that future; a modal doesn't.",
+        ],
+      },
+      {
+        heading: "Do we show them their emails before importing?",
+        navLabel: "Preview or not",
+        body: [
+          "A preview reassures, but for a 40,000-row list it shows a fraction of a percent while implying you've verified the whole thing.",
+          "A preview should verify parsing, not content: show enough to prove the file was read correctly, label it as a sample, and never let it pose as a review step.",
+        ],
+      },
+      {
+        heading: "Why the modal is two steps",
+        navLabel: "Two-step commit",
+        body: [
+          "Import is effectively irreversible: once thousands of people are in a creator's audience, undoing it isn't a button.",
+          "Two steps, because the creator is making two different decisions: is this the right file, and am I ready for these people to be members. Collapsing them into one means neither gets attention. Two is also the ceiling; a third would make a routine action feel like a contract.",
+        ],
+      },
+      {
+        heading: "Import can take up to an hour",
+        navLabel: "The long wait",
+        body: [
+          "Imports run on the backend and can take up to an hour. That breaks the contract of a modal: modals are supposed to resolve. A spinner that spins for an hour reads as broken.",
+          "Set the expectation before the wait, not during it. Say up front that this takes time, that it runs whether or not the creator stays, and that they'll be told when it's done, then release them. An honest estimate beats a fast-looking animation.",
+        ],
+      },
+      {
+        heading: "We can't tell creators why emails were skipped",
+        navLabel: "Skipped emails",
+        body: [
+          "The system knows a record didn't make it, but it can't reliably explain which of several reasons applied to any given email.",
+          "A creator uploads 5,000 emails, 4,700 import, and the natural next question, what happened to the other 300, has no answer we can give. The instinct is to bury it: shrink the number, gray it out, hide it behind a link. But a number the creator can compute themselves doesn't go away when you hide it. It just starts to look like a defect.",
+          "Give skipped emails similar visual hierarchy to imported ones. Equal weight implies transparency: it tells the creator this is a normal outcome, not an error. A skipped count that looks like a warning generates a support ticket. One that sits calmly beside the imported count reads as accounting.",
+        ],
+      },
+      {
+        heading: "One import, two destinations",
+        navLabel: "Two destinations",
+        body: [
+          "An import produces two kinds of members: email-only and free. Free members live in the ARM, but the ARM's structure made it difficult for email-only members to live there too. So one upload's results land in two different tabs.",
+          "This is a system constraint the creator did not sign up for and does not care about. From their side it was one file and one action. Split the outcome across two tabs without explanation and you get a creator convinced half their list vanished.",
+          "The design makes the split visible before it becomes confusing: a visible entry point surfaces the second destination as a real, named place rather than left to be discovered, and arrows on the review summary point each result to the page those members actually went to, so the summary works as a map, not a report. The summary stops being a receipt and becomes navigation.",
+        ],
+      },
+      {
+        heading: "And then the list disappears into the audience",
+        navLabel: "Import filter",
+        body: [
+          "The summary answers “where did they go?” once, in the moment. The second the creator navigates away, an imported list dissolves into an audience of thousands, and every follow-up action becomes impossible.",
+          "An import filter in the ARM. It's the unglamorous part and the one I'd defend hardest: it's what turns an import from an event into a cohort, something the creator can come back to, post to, and measure.",
+        ],
+      },
+      {
+        heading: "End to end",
+        navLabel: "Walkthrough",
+        body: ["Upload, confirm, wait, read the result, act on it."],
+      },
+      {
+        heading: "Not shipped, here's what I'd watch",
+        navLabel: "Reflection",
+        body: [
+          "This hasn't shipped, so rather than claim outcomes I don't have, here's what I'd instrument: reach and its shape (not just imports per month, but the size distribution of creators running them, since un-skewing access from large creators was the point), support volume on skipped emails (the real test of the equal-hierarchy call, since questions shouldn't scale with import volume if it works), second imports (repeat usage is what would justify the tab investment), and free behavior downstream, the actual hypothesis: do creators who import post to and build for free members more than creators who don't?",
+          "Still open: whether the two-tab split can be fixed in the data model rather than papered over in the UI, and whether skip reasons can ever be surfaced. That constraint drove more compromise than anything else here.",
+        ],
+      },
+    ],
+  },
 ];
 
 export const getProject = (slug: string) =>
