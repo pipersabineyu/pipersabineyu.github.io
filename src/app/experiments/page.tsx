@@ -23,12 +23,10 @@ export default function ExperimentsPage() {
 
       {experiments.length > 0 ? (
         <FadeIn delay={0.1}>
-          <div className="mt-10 rounded-3xl border border-border bg-surface px-6 py-10 sm:px-10 sm:py-14">
-            <div className="mx-auto grid grid-cols-1 gap-x-10 gap-y-14 sm:grid-cols-3">
-              {experiments.map((exp) => (
-                <PrototypeFrame key={exp.title} src={exp.src} title={exp.title} />
-              ))}
-            </div>
+          <div className="mt-10 flex flex-wrap justify-center gap-x-10 gap-y-14">
+            {experiments.map((exp) => (
+              <PrototypeFrame key={exp.title} src={exp.src} title={exp.title} />
+            ))}
           </div>
         </FadeIn>
       ) : (

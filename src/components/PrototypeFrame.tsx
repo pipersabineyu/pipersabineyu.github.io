@@ -19,8 +19,8 @@ const STAGE_H = 1120;
 // Widest the box ever gets, and the breathing room inside it. Shadows from
 // the prototypes' own device chrome spill past the bezel, so the padding is
 // what keeps them from touching the box edge.
-const MAX_BOX_WIDTH = 344;
-const BOX_PADDING = 22;
+const MAX_BOX_WIDTH = 460;
+const BOX_PADDING = 28;
 
 // Nominal bezel aspect (a 393x852 screen in a ~14px bezel), used to give the
 // box a stable aspect ratio so its height is reserved before measurement
@@ -58,10 +58,9 @@ function findBezel(doc: Document) {
   return best;
 }
 
-// No background/border of its own — these sit together inside a shared
-// bg-surface stage (the same gray used for phone prototypes in case
-// studies), so the individual frame just needs to clip and position the
-// iframe, not provide its own boxed look.
+// Each prototype gets its own bg-surface stage (the same gray used for
+// phone prototypes in case studies) rather than sharing one — makes each
+// feel like a distinct artifact instead of one grouped set.
 export function PrototypeFrame({
   src,
   title,
@@ -150,7 +149,7 @@ export function PrototypeFrame({
     >
       <div
         ref={boxRef}
-        className="relative w-full overflow-hidden rounded-3xl"
+        className="relative w-full overflow-hidden rounded-3xl border border-border bg-surface transition-colors group-hover:border-foreground/20"
         style={{ aspectRatio: BOX_ASPECT }}
       >
         {shouldLoad ? (
