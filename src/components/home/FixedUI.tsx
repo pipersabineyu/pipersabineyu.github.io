@@ -27,11 +27,16 @@ function exitFadeAt(p: number) {
   return 1 - Math.min(1, p / 0.3);
 }
 
-// Bottom-center under the media at every breakpoint, keeping the cube/covers
-// dead-centered above it. bottom-20 + safe-area — on phones the old 48px sat
-// close enough to the edge that browser chrome could eat into it.
+// Below CenterStage's SIDE_BY_SIDE_MIN_WIDTH (Tailwind's `lg:`): bottom-
+// center under the media, which is dead-centered above it. At/above: left
+// column next to the media, which is now dead-centered on the full
+// viewport rather than shifted to make room — keep TEXT_RESERVE in
+// CenterStage/LoadingScreen in sync with this column's width.
+// bottom-20 + safe-area — on phones the old 48px sat close enough to the
+// edge that browser chrome could eat into it.
 const blockPosition =
-  "absolute inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] px-6 text-center";
+  "absolute inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] px-6 text-center " +
+  "lg:inset-x-auto lg:bottom-auto lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:px-0 lg:text-left";
 
 function ReplayButton() {
   return (
@@ -100,10 +105,10 @@ export function FixedUI({
         <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">
           Who I am <span className="text-subtle/70">· 00/{String(projects.length).padStart(2, "0")}</span>
         </p>
-        <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground">
+        <p className="mx-auto mt-3 max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground lg:mx-0">
           Designer who tinkers, creates, and ships production-ready code.
         </p>
-        <div className="flex justify-center">
+        <div className="flex justify-center lg:justify-start">
           <ReplayButton />
         </div>
       </div>
@@ -124,7 +129,7 @@ export function FixedUI({
         </p>
         <Link
           href={`/work/${current.slug}`}
-          className="mx-auto mt-3 block max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground"
+          className="mx-auto mt-3 block max-w-[280px] text-[26px] font-semibold leading-[1.2] text-foreground lg:mx-0"
         >
           {current.title}
         </Link>

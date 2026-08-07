@@ -15,11 +15,12 @@ const MOBILE_MINI_SIZE = 100;
 const TEXT_GAP = 28;
 
 // Where the real homepage cube sits relative to true viewport center, from
-// CenterStage's DesignLayer container (`pb-28`): the 112px bottom pad lifts
-// its center by half that, at every breakpoint. The loading cube starts
-// dead center and travels exactly this far as it grows, so it arrives on
-// top of the real cube instead of jumping at the handoff.
-const CUBE_SHIFT_Y = -56;
+// CenterStage's DesignLayer container (`pb-28 lg:pb-0`): stacked, the 112px
+// bottom pad lifts its center by half that; side-by-side, the cube is truly
+// centered so there's no shift at all. The loading cube starts dead center
+// and travels exactly this far as it grows, so it arrives on top of the
+// real cube instead of jumping at the handoff.
+const STACKED_SHIFT_Y = -56;
 
 // PhotoCube's tile gap/radius default to fixed px (10/3) sized for the real
 // homepage cube — left alone, they'd stay that size even at mini size, so
@@ -36,12 +37,17 @@ function easeOutQuint(t: number) {
 }
 
 // Same formula as CenterStage's useCubeSize (including its safety cap that
-// keeps a fully-dragged cube from ever reaching the fixed text below it) —
-// kept in exact sync so the loading cube grows into precisely the size the
-// real homepage cube will be at. If that formula changes, this one needs to
-// change with it.
+// keeps a fully-dragged cube from ever reaching the fixed text) — kept in
+// exact sync so the loading cube grows into precisely the size the real
+// homepage cube will be at. If that formula changes, this one needs to
+// change with it. Matches Tailwind's `lg:` — keep in sync with CenterStage
+// / FixedUI.
+const SIDE_BY_SIDE_MIN_WIDTH = 1024;
+const TEXT_RIGHT_EDGE = 312;
 const TEXT_BLOCK_HEIGHT = 140;
 const CUBE_SAFETY_MARGIN = 28;
+const TEXT_RESERVE = TEXT_RIGHT_EDGE + CUBE_SAFETY_MARGIN;
+const WORST_X_RATIO = 0.85;
 const WORST_Y_RATIO = 0.9;
 
 function useCubeTargetSize() {
@@ -50,9 +56,14 @@ function useCubeTargetSize() {
     const update = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      const stacked = vw < SIDE_BY_SIDE_MIN_WIDTH;
 
-      const safeCap =
-        (vh / 2 - 56 - TEXT_BLOCK_HEIGHT - CUBE_SAFETY_MARGIN) / WORST_Y_RATIO;
+      const safeCap = stacked
+        ? (vh / 2 - 56 - TEXT_BLOCK_HEIGHT - CUBE_SAFETY_MARGIN) / WORST_Y_RATIO
+        : Math.min(
+            (vw / 2 - TEXT_RESERVE) / WORST_X_RATIO,
+            vh / 2 / WORST_Y_RATIO
+          );
       const preferred = Math.min(420, vw * 0.68);
 
       setSize(Math.max(120, Math.min(preferred, safeCap)));
@@ -78,6 +89,20 @@ function useIsPhone() {
   return isPhone;
 }
 
+// Which way the cube has to travel to reach the real homepage cube — must
+// track CenterStage's SIDE_BY_SIDE_MIN_WIDTH (Tailwind's `lg`) exactly.
+function useIsStacked() {
+  const [isStacked, setIsStacked] = useState(false);
+  useEffect(() => {
+    const update = () =>
+      setIsStacked(window.innerWidth < SIDE_BY_SIDE_MIN_WIDTH);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return isStacked;
+}
+
 export function LoadingScreen() {
   const [show, setShow] = useState(false);
   const [phase, setPhase] = useState<"counting" | "grow">("counting");
@@ -88,6 +113,7 @@ export function LoadingScreen() {
   const targetSizeRef = useRef(targetSize);
   targetSizeRef.current = targetSize;
   const isPhone = useIsPhone();
+  const isStacked = useIsStacked();
 
   const activeMiniSize = isPhone ? MOBILE_MINI_SIZE : MINI_SIZE;
   const activeMiniSizeRef = useRef(activeMiniSize);
@@ -127,7 +153,7 @@ export function LoadingScreen() {
   // cube's position lands in lockstep with the scale and the rotation
   // settle rather than on its own curve.
   const travel = phase === "grow" ? growProgress : 0;
-  const shiftY = CUBE_SHIFT_Y * travel;
+  const shiftY = isStacked ? STACKED_SHIFT_Y * travel : 0;
 
   const play = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);

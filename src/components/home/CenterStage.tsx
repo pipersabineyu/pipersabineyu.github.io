@@ -42,13 +42,22 @@ function useLayerOpacity(progress: MotionValue<number>, i: number) {
   return opacity;
 }
 
-// The cube (and the project covers behind it) is dead center of the
-// viewport at every breakpoint, shifted up slightly (pb-28 below) to
-// reserve room for FixedUI's text, which now always sits bottom-center
-// under it rather than beside it on larger screens. Keep FixedUI's
-// blockPosition using the same reserve.
+// Below this the cube sits on top with text below it (phone, tablet
+// portrait); at or above, the cube is dead center of the full viewport with
+// text in a fixed left column beside it (tablet landscape / laptop).
+// Matches Tailwind's `lg:` — keep FixedUI's blockPosition and this file's
+// lg:pb switches, and LoadingScreen's copy of this breakpoint, in sync.
+const SIDE_BY_SIDE_MIN_WIDTH = 1024;
+// FixedUI's left-8 (32px) + its max-w-[280px] text column.
+const TEXT_RIGHT_EDGE = 312;
+// Stacked layout: FixedUI's bottom offset (80px + a safe-area allowance) +
+// the two-line intro/work text block.
 const TEXT_BLOCK_HEIGHT = 140;
 const SAFETY_MARGIN = 28;
+// Side-by-side: how far the fixed text column's right edge sits from the
+// viewport's left edge, plus a safety margin the cube's worst-case dragged
+// extent must clear.
+const TEXT_RESERVE = TEXT_RIGHT_EDGE + SAFETY_MARGIN;
 
 // The cube is draggable up to rx=±78°, and ry freely — at extreme angles
 // its projected (2D screen) bounding box is much bigger than its flat edge
@@ -56,23 +65,37 @@ const SAFETY_MARGIN = 28;
 // (rx, ry) combination the drag/spin can reach gives a worst-case
 // half-extent of ~0.80x (horizontal) / ~0.89x (vertical) the edge length,
 // not the naive 0.5x a flat, unrotated square would use.
+const WORST_X_RATIO = 0.85;
 const WORST_Y_RATIO = 0.9;
 
-// Keeps the cube from ever reaching the fixed text below it, at any
-// breakpoint and any rotation the user can drag it to — not just from
-// overflowing the viewport. The 3D face math needs an actual px number, so
-// this can't just be done with a CSS max-width.
+// Keeps the cube from ever reaching the fixed text, at any breakpoint and
+// any rotation the user can drag it to — not just from overflowing the
+// viewport. The 3D face math needs an actual px number, so this can't just
+// be done with a CSS max-width.
+//
+// Side-by-side keeps the cube truly centered on the full viewport (not
+// shifted right to "center" in the space remaining after the text column) —
+// so its worst-case leftward extent, measured from true center, is what has
+// to clear the text. That's a tighter constraint than centering-in-the-
+// remainder, which is why side-by-side only kicks in at SIDE_BY_SIDE_MIN_WIDTH:
+// below that there isn't room for a reasonably sized cube to stay centered
+// AND clear the text, so it stays stacked instead.
 function useCubeSize() {
   const [size, setSize] = useState(420);
   useEffect(() => {
     const update = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      const stacked = vw < SIDE_BY_SIDE_MIN_WIDTH;
 
-      // Cube center is shifted up by half of pb-28 (56px); its worst-case
-      // bottom edge must still clear the text below it.
-      const safeCap =
-        (vh / 2 - 56 - TEXT_BLOCK_HEIGHT - SAFETY_MARGIN) / WORST_Y_RATIO;
+      const safeCap = stacked
+        ? // Cube center is shifted up by half of pb-28 (56px); its worst-case
+          // bottom edge must still clear the text below it.
+          (vh / 2 - 56 - TEXT_BLOCK_HEIGHT - SAFETY_MARGIN) / WORST_Y_RATIO
+        : Math.min(
+            (vw / 2 - TEXT_RESERVE) / WORST_X_RATIO,
+            vh / 2 / WORST_Y_RATIO
+          );
       const preferred = Math.min(420, vw * 0.68);
 
       setSize(Math.max(120, Math.min(preferred, safeCap)));
@@ -116,7 +139,7 @@ function DesignLayer({
 
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center pb-28"
+      className="absolute inset-0 flex items-center justify-center pb-28 lg:pb-0"
       style={{ opacity, pointerEvents: opacity > 0.02 ? "auto" : "none" }}
     >
       <PhotoCube
@@ -173,7 +196,7 @@ function ProjectLayer({
   const prototypes = project.homePrototypes;
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center p-6 pb-28 md:pt-10 md:pr-10 md:pl-10 md:pb-28"
+      className="absolute inset-0 flex items-center justify-center p-6 pb-28 lg:p-10"
       style={{ opacity, pointerEvents: opacity > 0.02 ? "auto" : "none" }}
     >
       <Link
