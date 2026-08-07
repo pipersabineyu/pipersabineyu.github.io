@@ -306,7 +306,6 @@ export const projects: Project[] = [
       {
         kind: "image",
         src: "/media/self-serve-email-imports/07b-summary-split-destinations.jpg",
-        caption: "Each result points to the page those members actually went to.",
         after: "One import, two destinations",
       },
       {

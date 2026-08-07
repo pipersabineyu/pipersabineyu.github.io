@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CaseStudyNav } from "@/components/CaseStudyNav";
 import { FadeIn } from "@/components/FadeIn";
 import { PhoneFrame } from "@/components/PhoneFrame";
+import { WalkthroughEmbed } from "@/components/WalkthroughEmbed";
 import { profile } from "@/lib/profile";
 import { projects, type Project, type ProjectMedia } from "@/lib/projects";
 
@@ -63,17 +64,14 @@ function PhoneStage({ items }: { items: ProjectMedia[] }) {
 function ContextMedia({ item }: { item: ProjectMedia }) {
   // A couple of context items are self-contained interactive HTML bundles
   // (the same kind of prototype export used on the Experiments page)
-  // rather than a plain video file — those need an iframe, not <video>.
+  // rather than a plain video file — those get scaled down as a whole
+  // (WalkthroughEmbed) rather than resized, so the real app layout inside
+  // doesn't reflow into a broken narrow-viewport state.
   if (item.src.endsWith(".html")) {
     return (
       <FadeIn>
-        <div className="mt-2 mb-8 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border">
-          <iframe
-            title="Walkthrough"
-            src={item.src}
-            loading="lazy"
-            className="h-full w-full border-0"
-          />
+        <div className="mt-2 mb-8">
+          <WalkthroughEmbed src={item.src} />
         </div>
       </FadeIn>
     );
@@ -103,22 +101,25 @@ function MediaGroup({ items }: { items: ProjectMedia[] }) {
   const phones = items.filter((m) => m.kind === "phone");
   if (phones.length > 0) return <PhoneStage items={phones} />;
 
+  // Stacked full-width rather than a side-by-side grid — at half-width
+  // these screenshots (real product UI, small text and controls) weren't
+  // legible. One per row, as big as the column allows.
   return (
     <FadeIn>
-      <div className="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="my-8 flex flex-col gap-10">
         {items.map((m) => (
-          <figure key={m.src} className="flex flex-col items-center gap-2">
+          <figure key={m.src} className="flex flex-col items-center gap-3">
             <div className="relative w-full overflow-hidden rounded-md border border-border">
               <Image
                 src={m.src}
                 alt={m.caption ?? ""}
-                width={1200}
-                height={800}
+                width={1600}
+                height={1000}
                 className="h-auto w-full object-cover"
               />
             </div>
             {m.caption && (
-              <figcaption className="max-w-xs text-center text-[12px] leading-relaxed text-subtle">
+              <figcaption className="max-w-md text-center text-[12px] leading-relaxed text-subtle">
                 {m.caption}
               </figcaption>
             )}
