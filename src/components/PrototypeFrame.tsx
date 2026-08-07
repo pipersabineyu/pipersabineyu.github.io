@@ -13,7 +13,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 // once it settles we measure the device bezel inside it (same origin, so the
 // document is readable) and pick the scale and offset that land every
 // prototype's bezel at the same rendered width, centered in the box.
-const STAGE_W = 620;
+//
+// 800 (not 620) because one prototype lays out an explanation panel next to
+// the phone rather than just the phone alone — under 800px that two-column
+// layout wraps/overlaps instead of sitting side by side. The extra width is
+// harmless for single-phone prototypes; they just get more empty margin
+// around them, which findBezel crops away regardless.
+const STAGE_W = 800;
 const STAGE_H = 1120;
 
 // Widest the box ever gets, and the breathing room inside it. Sized so two
@@ -33,7 +39,11 @@ const BOX_ASPECT =
   (MAX_BOX_WIDTH - BOX_PADDING * 2) /
   ((MAX_BOX_WIDTH - BOX_PADDING * 2) * DEVICE_ASPECT + BOX_PADDING * 2);
 
-type Fit = { scale: number; x: number; y: number };
+type Fit = { scale: number; x: number; y: number; clip: string };
+
+// Stage-pixel slack kept around the bezel when clipping, so device-chrome
+// shadows aren't cut off flush at the bezel edge.
+const CLIP_MARGIN = 40;
 
 // Same refresh glyph as the home page's "Replay intro" control, so the two
 // replay affordances read as the same action across the site.
@@ -55,10 +65,13 @@ function ReplayIcon() {
   );
 }
 
-// The bezel is always within a few levels of <body> (stage wrapper, then the
-// device), so a shallow breadth-first walk finds it without touching the
-// thousands of nodes some of these prototypes render inside the screen.
-const MAX_DEPTH = 5;
+// The bezel is always within a few levels of <body>, so a shallow
+// breadth-first walk finds it without touching the thousands of nodes some
+// of these prototypes render inside the screen. One prototype nests it 7
+// levels down (extra wrapper divs from its own layout/animation library),
+// so this needs enough headroom for that without going deep enough to
+// start walking into the screen's actual content.
+const MAX_DEPTH = 9;
 
 function findBezel(doc: Document) {
   let best: DOMRect | null = null;
@@ -140,8 +153,25 @@ export function PrototypeFrame({
     // cropping an unusually tall device.
     const scale = Math.min(innerW / bezel.width, innerH / bezel.height);
 
+    // Some prototypes lay out other content (an explanation panel, extra
+    // screens) right next to the bezel on the same oversized stage. Fitting
+    // by whichever dimension is more constraining leaves slack in the
+    // other — and without a clip, that slack reveals whatever's next to the
+    // bezel instead of empty space. Clipping the iframe to a margin around
+    // the bezel itself (in the iframe's own untransformed coordinates, so
+    // the transform below scales the clip along with everything else)
+    // keeps only the device visible regardless of that leftover slack.
+    const clip = `inset(${Math.max(0, bezel.top - CLIP_MARGIN)}px ${Math.max(
+      0,
+      STAGE_W - bezel.right - CLIP_MARGIN
+    )}px ${Math.max(0, STAGE_H - bezel.bottom - CLIP_MARGIN)}px ${Math.max(
+      0,
+      bezel.left - CLIP_MARGIN
+    )}px)`;
+
     setFit({
       scale,
+      clip,
       x: BOX_PADDING + (innerW - bezel.width * scale) / 2 - bezel.left * scale,
       y: BOX_PADDING + (innerH - bezel.height * scale) / 2 - bezel.top * scale,
     });
@@ -183,7 +213,7 @@ export function PrototypeFrame({
       >
         <div
           ref={boxRef}
-          className="relative w-full"
+          className="relative w-full overflow-hidden"
           style={{ aspectRatio: BOX_ASPECT }}
         >
           {shouldLoad ? (
@@ -198,6 +228,7 @@ export function PrototypeFrame({
               style={{
                 width: STAGE_W,
                 height: STAGE_H,
+                clipPath: fit?.clip,
                 transform: fit
                   ? `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})`
                   : undefined,

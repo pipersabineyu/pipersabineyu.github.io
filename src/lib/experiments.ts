@@ -19,4 +19,8 @@ export const experiments: Experiment[] = [
     title: "Get indoor directions to your car from Uber",
     src: "/experiments/uber-indoor-directions.html",
   },
+  {
+    title: "Pack outfits for a trip guaranteed to fit your suitcase",
+    src: "/experiments/fits-reel.html",
+  },
 ];
