@@ -255,21 +255,21 @@ export const projects: Project[] = [
         kind: "phone",
         src: "/media/idle-songwriting/clip-1-punchin.mp4",
         poster: "/media/idle-songwriting/clip-1-punchin.jpg",
-        caption: "Screen 01: hold to loop a section, then record over it.",
+        caption: "Hold to loop a section, then record over it.",
         after: "User records lyrics over the loop",
       },
       {
         kind: "phone",
-        src: "/media/idle-songwriting/clip-2-rhyme.mp4",
-        poster: "/media/idle-songwriting/clip-2-rhyme.jpg",
-        caption: "Screen 02: the loop becomes temporary generated lyrics.",
+        src: "/media/idle-songwriting/clip-2-generate.mp4",
+        poster: "/media/idle-songwriting/clip-2-generate.jpg",
+        caption: "The loop becomes temporary generated lyrics.",
         after: "User generates lyrics based on the loop",
       },
       {
         kind: "phone",
         src: "/media/idle-songwriting/clip-2-rhyme.mp4",
         poster: "/media/idle-songwriting/clip-2-rhyme.jpg",
-        caption: "Screen 03: the Playground lets you explore rhyme schematics and adjust the take.",
+        caption: "The Playground lets you explore rhyme schematics and adjust the take.",
         after: "User adjusts generative lyrics",
       },
     ],
@@ -325,7 +325,7 @@ export const projects: Project[] = [
       },
       {
         heading: "User records lyrics over the loop",
-        navLabel: "Screen 01",
+        navLabel: "Record over loop",
         body: [
           "The user holds to loop a section of the song, so that part now repeats over and over.",
           "They can sing, freestyle, or even mumble over the looped section, capturing an idea in the moment instead of stopping to write it down first.",
@@ -333,7 +333,7 @@ export const projects: Project[] = [
       },
       {
         heading: "User generates lyrics based on the loop",
-        navLabel: "Screen 02",
+        navLabel: "Generate lyrics",
         body: [
           "Once a take is recorded, the app turns the loop into temporary generated lyric suggestions, letting the artist stay in the flow of making music instead of stopping to write.",
           "They can view rhyming options and alternate lines from the AI, then tweak or record again using those as a starting point.",
@@ -341,7 +341,7 @@ export const projects: Project[] = [
       },
       {
         heading: "User adjusts generative lyrics",
-        navLabel: "Screen 03",
+        navLabel: "Adjust & refine",
         body: [
           "From there, the artist keeps shaping the take: swapping in a different rhyme, rerecording a line, or building on a suggestion until it feels like theirs, not the AI's.",
         ],
