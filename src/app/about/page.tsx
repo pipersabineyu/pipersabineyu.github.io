@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { CaseStudyNav } from "@/components/CaseStudyNav";
 import { FadeIn } from "@/components/FadeIn";
 import { StampBoard } from "@/components/about/StampBoard";
 import { profile } from "@/lib/profile";
@@ -17,7 +16,6 @@ const STATS = [
 export default function AboutPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-6 pb-24 pt-24 sm:pt-28">
-      <CaseStudyNav items={[]} backHref="/" />
       <FadeIn delay={0.03}>
         <p className="mt-6 font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
           About me
