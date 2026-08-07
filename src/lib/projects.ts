@@ -256,14 +256,14 @@ export const projects: Project[] = [
         src: "/media/idle-songwriting/clip-1-punchin.mp4",
         poster: "/media/idle-songwriting/clip-1-punchin.jpg",
         caption: "Punch-in recording: lay down short takes over the same beat.",
-        after: "Design decisions",
+        after: "Recording over the loop, take by take",
       },
       {
         kind: "phone",
         src: "/media/idle-songwriting/clip-2-rhyme.mp4",
         poster: "/media/idle-songwriting/clip-2-rhyme.jpg",
         caption: "Rhyme suggestions step in only when you're stuck.",
-        after: "Design decisions",
+        after: "Rhyme suggestions, only when you're stuck",
       },
     ],
     sections: [
@@ -275,21 +275,78 @@ export const projects: Project[] = [
       },
       {
         heading: "The problem",
+        navLabel: "Problem",
         body: [
-          "Turning idle time into moments of music creation. The gaps between activities, waiting on a bus, pacing a room, are where songwriting ideas actually show up. Most tools assume you're already sitting down to “make music.”",
+          "“The finished product of an album is flawless. But the process of making an album? Broken.”",
+          "The gaps between activities, waiting on a bus, pacing a room, are where songwriting ideas actually show up. Most tools assume you're already sitting down to “make music,” and reach for AI that substitutes in for the creative work instead of supporting it.",
         ],
       },
       {
-        heading: "Design decisions",
+        heading: "What 15+ artists told us",
+        navLabel: "Research",
+        kind: "insights",
+        body: [
+          "We interviewed and tested with over 15 working artists, musicians, and songwriters before designing anything.",
+        ],
+        cards: [
+          {
+            title: "Quick bursts of inspiration end up in disorganized apps",
+            body: "Ideas surfaced between activities and got scattered across notes apps and voice memos never built for songwriting.",
+          },
+          {
+            title: "Artists don't want “one-prompt” AI",
+            body: "Generating a full song end-to-end felt like the AI was writing it instead of them.",
+          },
+          {
+            title: "Artists don't “write” lyrics, they punch in",
+            body: "Lyrics came from laying down short takes over a beat and revising them, not composing line by line on a blank page.",
+          },
+        ],
+      },
+      {
+        heading: "“It's more about finding a rhythm than the lyrics themselves.” — Jace, singer/songwriter",
+        kind: "quote",
+        quote: "“It's more about finding a rhythm than the lyrics themselves.” — Jace, singer/songwriter",
+      },
+      {
+        heading: "Generate temporary lyrics, keep a permanent flow.",
+        navLabel: "Hypothesis",
+      },
+      {
+        heading: "AI that supports creation, not substitutes for it",
+        navLabel: "Solution",
+        body: [
+          "The app fills idle moments with malleable lyric ideas artists can punch in, test, and refine later: temporary lyrics generated over a loop, while the artist's own flow stays permanent.",
+        ],
+        stateBefore: "A blank page, or an AI that writes the whole song for you.",
+        stateAfter: "Temporary lyrics you punch in, test, and refine yourself.",
+      },
+      {
+        heading: "Recording over the loop, take by take",
+        navLabel: "Punch-in recording",
         body: [
           "A punch-in recording system lets people lay down multiple short takes over the same beat, so they can review rhythm, pacing, and word placement side by side without overplanning any single take.",
-          "Lightweight rhyme suggestions step in only when someone's stuck, easing the bottleneck of lyric-writing without ever writing the line for them.",
-          "The goal is a usable first draft, not a final one. The whole system is tuned for rapid iteration over perfection, so people can tell which takes “felt right” without re-listening to everything from scratch, and revisit past versions, compare changes, and move forward without second-guessing.",
         ],
       },
       {
-        heading: "Reflection",
+        heading: "Rhyme suggestions, only when you're stuck",
+        navLabel: "Rhyme suggestions",
         body: [
+          "Lightweight rhyme suggestions step in only when someone's stuck, easing the bottleneck of lyric-writing without ever writing the line for them, generating something temporary to punch in, never a permanent line.",
+        ],
+      },
+      {
+        heading: "A usable first draft, not a final one",
+        navLabel: "Iteration",
+        body: [
+          "The whole system is tuned for rapid iteration over perfection, so people can tell which takes “felt right” without re-listening to everything from scratch, revisit past versions, compare changes, and move forward without second-guessing.",
+        ],
+      },
+      {
+        heading: "What I took away",
+        navLabel: "Reflection",
+        body: [
+          "“Designing in theory never works.”",
           "By limiting where and how AI intervened, the product actually felt more creative, not less. And because nothing in the system felt permanent, people were more willing to experiment. Reversibility did more for creative confidence than any feature did.",
         ],
       },
