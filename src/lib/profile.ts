@@ -21,6 +21,11 @@ export const profile = {
   ],
   experience: [
     {
+      period: "Summer 2026",
+      role: "Product Management Intern",
+      org: "Patreon",
+    },
+    {
       period: "Fall 2025",
       role: "Product Designer",
       org: "Notability (Ginger Labs)",
