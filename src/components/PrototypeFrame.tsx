@@ -35,6 +35,26 @@ const BOX_ASPECT =
 
 type Fit = { scale: number; x: number; y: number };
 
+// Same refresh glyph as the home page's "Replay intro" control, so the two
+// replay affordances read as the same action across the site.
+function ReplayIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 12a9 9 0 1 1-3-6.7" />
+      <polyline points="21 3 21 9 15 9" />
+    </svg>
+  );
+}
+
 // The bezel is always within a few levels of <body> (stage wrapper, then the
 // device), so a shallow breadth-first walk finds it without touching the
 // thousands of nodes some of these prototypes render inside the screen.
@@ -75,6 +95,10 @@ export function PrototypeFrame({
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [fit, setFit] = useState<Fit | null>(null);
+  // Bumping this remounts the iframe (fresh `key`), which is a reliable way
+  // to restart a self-contained prototype from its own beginning — reusing
+  // the same DOM node's `src` isn't guaranteed to force a reload.
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     const el = boxRef.current;
@@ -128,11 +152,13 @@ export function PrototypeFrame({
   // (plus a couple of beats after, for fonts and entry animations that
   // settle late) is what keeps the fit correct rather than locked to the
   // placeholder that was there first.
+  // Re-runs the same settle-in retry timers a fresh load gets, so a manual
+  // replay re-fits the bezel exactly like the first load did.
   useEffect(() => {
     if (!shouldLoad) return;
     const timers = [400, 1200, 2500].map((ms) => setTimeout(measure, ms));
     return () => timers.forEach(clearTimeout);
-  }, [shouldLoad, measure]);
+  }, [shouldLoad, measure, reloadKey]);
 
   useEffect(() => {
     const box = boxRef.current;
@@ -142,45 +168,60 @@ export function PrototypeFrame({
     return () => resize.disconnect();
   }, [measure]);
 
+  const replay = useCallback(() => {
+    setFit(null);
+    setReloadKey((k) => k + 1);
+  }, []);
+
   return (
-    <a
-      href={src}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group mx-auto block w-full"
-      style={{ maxWidth: MAX_BOX_WIDTH }}
-    >
-      <div
-        ref={boxRef}
-        className="relative w-full overflow-hidden rounded-3xl border border-border bg-surface transition-colors group-hover:border-foreground/20"
-        style={{ aspectRatio: BOX_ASPECT }}
+    <div className="group relative mx-auto w-full" style={{ maxWidth: MAX_BOX_WIDTH }}>
+      <a
+        href={src}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block overflow-hidden rounded-3xl border border-border bg-surface transition-colors group-hover:border-foreground/20"
       >
-        {shouldLoad ? (
-          <iframe
-            ref={iframeRef}
-            title={title}
-            src={src}
-            tabIndex={-1}
-            onLoad={measure}
-            className="pointer-events-none absolute left-0 top-0 origin-top-left border-0 bg-transparent"
-            style={{
-              width: STAGE_W,
-              height: STAGE_H,
-              transform: fit
-                ? `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})`
-                : undefined,
-              // Nothing to show until the fit is known — an unscaled 620px
-              // stage flashing at full size would be worse than a beat of
-              // empty box.
-              opacity: fit ? 1 : 0,
-              transition: "opacity 200ms ease",
-            }}
-          />
-        ) : null}
-      </div>
-      <p className="mt-4 text-center text-[13px] text-muted transition-colors group-hover:text-foreground">
-        {title}
-      </p>
-    </a>
+        <div
+          ref={boxRef}
+          className="relative w-full"
+          style={{ aspectRatio: BOX_ASPECT }}
+        >
+          {shouldLoad ? (
+            <iframe
+              key={reloadKey}
+              ref={iframeRef}
+              title={title}
+              src={src}
+              tabIndex={-1}
+              onLoad={measure}
+              className="pointer-events-none absolute left-0 top-0 origin-top-left border-0 bg-transparent"
+              style={{
+                width: STAGE_W,
+                height: STAGE_H,
+                transform: fit
+                  ? `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})`
+                  : undefined,
+                // Nothing to show until the fit is known — an unscaled 620px
+                // stage flashing at full size would be worse than a beat of
+                // empty box.
+                opacity: fit ? 1 : 0,
+                transition: "opacity 200ms ease",
+              }}
+            />
+          ) : null}
+        </div>
+        <p className="px-5 pb-5 pt-3 text-center text-[13px] text-muted transition-colors group-hover:text-foreground">
+          {title}
+        </p>
+      </a>
+      <button
+        type="button"
+        onClick={replay}
+        aria-label="Replay prototype"
+        className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-background/60 text-subtle backdrop-blur-md transition-colors hover:text-foreground"
+      >
+        <ReplayIcon />
+      </button>
+    </div>
   );
 }
