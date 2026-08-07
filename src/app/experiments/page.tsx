@@ -21,7 +21,12 @@ export default function ExperimentsPage() {
         <FadeIn delay={0.1}>
           <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
             {experiments.map((exp) => (
-              <PrototypeFrame key={exp.title} src={exp.src} title={exp.title} />
+              <PrototypeFrame
+                key={exp.title}
+                src={exp.src}
+                title={exp.title}
+                drawBezel={exp.drawBezel}
+              />
             ))}
           </div>
         </FadeIn>

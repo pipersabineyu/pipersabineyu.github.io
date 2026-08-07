@@ -24,10 +24,9 @@ const STAGE_H = 1120;
 
 // Widest the box ever gets, and the breathing room inside it. Sized so two
 // side by side (with the grid's gap-x-6) fit exactly inside the page's
-// max-w-4xl container, matching the About page's width. Shadows from the
-// prototypes' own device chrome spill past the bezel, so the padding is
-// what keeps them from touching the box edge — kept tight since the bezel
-// itself is the focal point, not the surrounding stage.
+// max-w-4xl container, matching the About page's width. No background/
+// border on the box itself — the padding just keeps the device from
+// touching the edge of its own invisible layout box.
 const MAX_BOX_WIDTH = 408;
 const BOX_PADDING = 16;
 
@@ -39,14 +38,22 @@ const BOX_ASPECT =
   (MAX_BOX_WIDTH - BOX_PADDING * 2) /
   ((MAX_BOX_WIDTH - BOX_PADDING * 2) * DEVICE_ASPECT + BOX_PADDING * 2);
 
-type Fit = { scale: number; x: number; y: number; clip: string };
+type Frame = { left: number; top: number; width: number; height: number; radius: number; k: number };
+type Fit = { scale: number; x: number; y: number; clip: string; frame: Frame | null };
 
-// Stage-pixel slack kept around the bezel when clipping. Kept tiny — just
-// enough to avoid clipping the bezel's own rounded corner — rather than
-// enough to fit the device chrome's drop shadow, which bled partway into
-// view and then got cut off hard at the clip edge. Excluding the shadow
-// entirely reads better than showing part of it.
-const CLIP_MARGIN = 3;
+// Matches PhoneFrame.tsx's own bezel proportions (padding 10 / outer radius
+// 41.6 at its BASE_WIDTH of 260) so a synthetic bezel drawn here looks like
+// the same device as the ones case studies use, just scaled to whatever
+// size the found screen ends up rendering at.
+const BEZEL_PAD_RATIO = 10 / 260;
+const BEZEL_RADIUS_RATIO = 41.6 / 260;
+
+// Stage-pixel slack kept around the bezel when clipping — just enough to
+// avoid clipping the bezel's own rounded corner. Any more than this let the
+// device chrome's drop shadow bleed partway into view and then get cut off
+// hard at the clip edge; excluding it entirely reads better than a
+// truncated sliver of it.
+const CLIP_MARGIN = 1;
 
 // Same refresh glyph as the home page's "Replay intro" control, so the two
 // replay affordances read as the same action across the site.
@@ -97,15 +104,16 @@ function findBezel(doc: Document) {
   return best;
 }
 
-// Each prototype gets its own bg-surface stage (the same gray used for
-// phone prototypes in case studies) rather than sharing one — makes each
-// feel like a distinct artifact instead of one grouped set.
 export function PrototypeFrame({
   src,
   title,
+  drawBezel = false,
 }: {
   src: string;
   title: string;
+  /** Draws a synthetic phone bezel around the found screen, for prototypes
+   * that don't already render their own device chrome. */
+  drawBezel?: boolean;
 }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -152,9 +160,16 @@ export function PrototypeFrame({
 
     const innerW = box.clientWidth - BOX_PADDING * 2;
     const innerH = box.clientHeight - BOX_PADDING * 2;
+    // When drawing our own bezel, the found "bezel" is really just the raw
+    // screen — reserve room around it (shrinking the target area) so a
+    // synthetic frame can wrap around the screen without overflowing the box.
+    const marginFactor = drawBezel ? 1 + BEZEL_PAD_RATIO * 2 : 1;
     // Fit on width so every prototype matches, but never at the cost of
     // cropping an unusually tall device.
-    const scale = Math.min(innerW / bezel.width, innerH / bezel.height);
+    const scale = Math.min(
+      innerW / marginFactor / bezel.width,
+      innerH / marginFactor / bezel.height
+    );
 
     // Some prototypes lay out other content (an explanation panel, extra
     // screens) right next to the bezel on the same oversized stage. Fitting
@@ -172,13 +187,32 @@ export function PrototypeFrame({
       bezel.left - CLIP_MARGIN
     )}px)`;
 
+    let frame: Frame | null = null;
+    if (drawBezel) {
+      const screenLeft = BOX_PADDING + (innerW - bezel.width * scale) / 2;
+      const screenTop = BOX_PADDING + (innerH - bezel.height * scale) / 2;
+      const screenWidth = bezel.width * scale;
+      const screenHeight = bezel.height * scale;
+      const k = screenWidth / 260;
+      const pad = 260 * BEZEL_PAD_RATIO * k;
+      frame = {
+        left: screenLeft - pad,
+        top: screenTop - pad,
+        width: screenWidth + pad * 2,
+        height: screenHeight + pad * 2,
+        radius: 260 * BEZEL_RADIUS_RATIO * k,
+        k,
+      };
+    }
+
     setFit({
       scale,
       clip,
+      frame,
       x: BOX_PADDING + (innerW - bezel.width * scale) / 2 - bezel.left * scale,
       y: BOX_PADDING + (innerH - bezel.height * scale) / 2 - bezel.top * scale,
     });
-  }, []);
+  }, [drawBezel]);
 
   // These prototypes are self-unpacking bundles: they finish by swapping in
   // their real document, which fires load again. Re-measuring on each load
@@ -212,13 +246,55 @@ export function PrototypeFrame({
         href={src}
         target="_blank"
         rel="noopener noreferrer"
-        className="block overflow-hidden rounded-3xl border border-border bg-surface transition-colors group-hover:border-foreground/20"
+        className="block overflow-hidden rounded-3xl"
       >
         <div
           ref={boxRef}
           className="relative w-full overflow-hidden"
           style={{ aspectRatio: BOX_ASPECT }}
         >
+          {fit?.frame && (
+            <div
+              className="pointer-events-none absolute bg-[#141414]"
+              style={{
+                left: fit.frame.left,
+                top: fit.frame.top,
+                width: fit.frame.width,
+                height: fit.frame.height,
+                borderRadius: fit.frame.radius,
+                opacity: fit ? 1 : 0,
+                transition: "opacity 200ms ease",
+              }}
+            >
+              <div
+                className="absolute rounded-l bg-[#141414]"
+                style={{
+                  left: -2 * fit.frame.k,
+                  top: 96 * fit.frame.k,
+                  height: 28 * fit.frame.k,
+                  width: 3 * fit.frame.k,
+                }}
+              />
+              <div
+                className="absolute rounded-l bg-[#141414]"
+                style={{
+                  left: -2 * fit.frame.k,
+                  top: 144 * fit.frame.k,
+                  height: 44 * fit.frame.k,
+                  width: 3 * fit.frame.k,
+                }}
+              />
+              <div
+                className="absolute rounded-r bg-[#141414]"
+                style={{
+                  right: -2 * fit.frame.k,
+                  top: 112 * fit.frame.k,
+                  height: 56 * fit.frame.k,
+                  width: 3 * fit.frame.k,
+                }}
+              />
+            </div>
+          )}
           {shouldLoad ? (
             <iframe
               key={reloadKey}
@@ -243,6 +319,16 @@ export function PrototypeFrame({
               }}
             />
           ) : null}
+          {fit?.frame && (
+            <div
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full bg-[#141414]"
+              style={{
+                top: fit.frame.top + 260 * BEZEL_PAD_RATIO * fit.frame.k + 8 * fit.frame.k,
+                height: 20 * fit.frame.k,
+                width: 80 * fit.frame.k,
+              }}
+            />
+          )}
         </div>
         <p className="px-5 pb-5 pt-3 text-center text-[13px] text-muted transition-colors group-hover:text-foreground">
           {title}

@@ -1,6 +1,10 @@
 export type Experiment = {
   title: string;
   src: string;
+  // Most of these prototypes draw their own phone bezel already. This one
+  // doesn't (it's just the screen), so PrototypeFrame draws a matching
+  // bezel around it so all four look like the same kind of artifact.
+  drawBezel?: boolean;
 };
 
 // Interactive HTML prototypes shown in the home page's "Prototyping
@@ -10,6 +14,7 @@ export const experiments: Experiment[] = [
   {
     title: "Pack outfits for a trip guaranteed to fit your suitcase",
     src: "/experiments/fits-reel.html",
+    drawBezel: true,
   },
   {
     title: "Experience the weather",
