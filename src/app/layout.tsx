@@ -6,6 +6,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { DevBreakpointControl } from "@/components/DevBreakpointControl";
 import { profile } from "@/lib/profile";
 
 const figtree = Figtree({
@@ -45,6 +46,7 @@ export default function RootLayout({
         <Nav />
         <main className="flex flex-1 flex-col">{children}</main>
         <Footer />
+        <DevBreakpointControl />
       </body>
     </html>
   );

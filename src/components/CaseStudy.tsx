@@ -61,6 +61,24 @@ function PhoneStage({ items }: { items: ProjectMedia[] }) {
 // of its own — just the video, playing plainly under whatever section
 // heading it's attached to.
 function ContextMedia({ item }: { item: ProjectMedia }) {
+  // A couple of context items are self-contained interactive HTML bundles
+  // (the same kind of prototype export used on the Experiments page)
+  // rather than a plain video file — those need an iframe, not <video>.
+  if (item.src.endsWith(".html")) {
+    return (
+      <FadeIn>
+        <div className="mt-2 mb-8 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border">
+          <iframe
+            title="Walkthrough"
+            src={item.src}
+            loading="lazy"
+            className="h-full w-full border-0"
+          />
+        </div>
+      </FadeIn>
+    );
+  }
+
   return (
     <FadeIn>
       <div className="mt-2 mb-8">
