@@ -41,9 +41,12 @@ const BOX_ASPECT =
 
 type Fit = { scale: number; x: number; y: number; clip: string };
 
-// Stage-pixel slack kept around the bezel when clipping, so device-chrome
-// shadows aren't cut off flush at the bezel edge.
-const CLIP_MARGIN = 40;
+// Stage-pixel slack kept around the bezel when clipping. Kept tiny — just
+// enough to avoid clipping the bezel's own rounded corner — rather than
+// enough to fit the device chrome's drop shadow, which bled partway into
+// view and then got cut off hard at the clip edge. Excluding the shadow
+// entirely reads better than showing part of it.
+const CLIP_MARGIN = 3;
 
 // Same refresh glyph as the home page's "Replay intro" control, so the two
 // replay affordances read as the same action across the site.

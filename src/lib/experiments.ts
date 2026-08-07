@@ -8,19 +8,19 @@ export type Experiment = {
 // a full case study, unlike the projects covered in the hero scroll-through.
 export const experiments: Experiment[] = [
   {
-    title: "Experience the weather",
-    src: "/experiments/curtains-with-weather.html",
+    title: "Pack outfits for a trip guaranteed to fit your suitcase",
+    src: "/experiments/fits-reel.html",
   },
   {
-    title: "Remind yourself to respond to messages later",
-    src: "/experiments/apple-messages-for-later.html",
+    title: "Experience the weather",
+    src: "/experiments/curtains-with-weather.html",
   },
   {
     title: "Get indoor directions to your car from Uber",
     src: "/experiments/uber-indoor-directions.html",
   },
   {
-    title: "Pack outfits for a trip guaranteed to fit your suitcase",
-    src: "/experiments/fits-reel.html",
+    title: "Remind yourself to respond to messages later",
+    src: "/experiments/apple-messages-for-later.html",
   },
 ];
