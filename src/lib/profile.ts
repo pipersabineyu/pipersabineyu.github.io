@@ -11,8 +11,8 @@ export const profile = {
   instagram: "https://instagram.com/piperzart",
   education: [
     {
-      org: "UC Berkeley",
-      detail: "College of Computing, Data Science and Society",
+      org: "UC Berkeley, College of Computing Data Science and Society",
+      detail: "HCI Design, Data Science, Economics",
     },
     {
       org: "Silicon Valley School of Design",
