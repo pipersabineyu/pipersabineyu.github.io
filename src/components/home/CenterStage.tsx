@@ -143,6 +143,13 @@ function DesignLayer({
 // the case study pages, so a prototype reads the same way wherever it
 // shows up on the site, not as a bare clipped rectangle here and a full
 // device frame there.
+//
+// Sized off HEIGHT, not width. The card is a fixed aspect-[4/3], but a
+// phone is a much taller aspect-[9/19.5] — sizing width to a percentage
+// of the card ignores that the card's height is the tighter constraint,
+// so the phone ends up taller than the card and gets clipped by its
+// overflow-hidden. Deriving width from a height percentage (via
+// aspect-ratio) keeps it inside the card at any card size instead.
 function ProjectPrototypes({
   clips,
 }: {
@@ -151,7 +158,10 @@ function ProjectPrototypes({
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-6 sm:gap-10">
       {clips.map((clip) => (
-        <div key={clip.src} className="w-[38%] max-w-[200px]">
+        <div
+          key={clip.src}
+          className="relative aspect-[9/19.5] h-[92%] max-h-[420px]"
+        >
           <PhoneFrame src={clip.src} poster={clip.poster} showNotch={false} />
         </div>
       ))}
