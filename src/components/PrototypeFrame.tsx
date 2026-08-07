@@ -16,10 +16,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const STAGE_W = 620;
 const STAGE_H = 1120;
 
-// Widest the box ever gets, and the breathing room inside it. Shadows from
-// the prototypes' own device chrome spill past the bezel, so the padding is
+// Widest the box ever gets, and the breathing room inside it. Sized so two
+// side by side (with the grid's gap-x-8) fit exactly inside the page's
+// max-w-4xl container, matching the About page's width. Shadows from the
+// prototypes' own device chrome spill past the bezel, so the padding is
 // what keeps them from touching the box edge.
-const MAX_BOX_WIDTH = 460;
+const MAX_BOX_WIDTH = 408;
 const BOX_PADDING = 28;
 
 // Nominal bezel aspect (a 393x852 screen in a ~14px bezel), used to give the

@@ -31,7 +31,7 @@ export const profile = {
       org: "Notability (Ginger Labs)",
     },
     {
-      period: "Fall 2025",
+      period: "Summer 2025",
       role: "Product Design Intern",
       org: "Ceribell",
     },

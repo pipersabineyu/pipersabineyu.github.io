@@ -46,11 +46,11 @@ export default function AboutPage() {
             <div className="mt-5 flex flex-col gap-5">
               {profile.experience.map((job) => (
                 <div key={`${job.period}-${job.org}`}>
-                  <p className="font-grotesk text-[26px] font-bold leading-none tracking-tight text-foreground sm:text-[30px]">
-                    {job.org}{" "}
-                    <span className="text-[13px] font-medium text-subtle">
-                      {job.period}
-                    </span>
+                  <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-subtle">
+                    {job.period}
+                  </p>
+                  <p className="mt-1 font-grotesk text-[26px] font-bold leading-none tracking-tight text-foreground sm:text-[30px]">
+                    {job.org}
                   </p>
                   <p className="mt-1 text-[13px] text-muted">{job.role}</p>
                 </div>
